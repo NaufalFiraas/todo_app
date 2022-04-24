@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:todo_app/view/formpage/form_page.dart';
 import 'package:todo_app/view/homepage/todo_container.dart';
 
 class HomePage extends StatelessWidget {
@@ -41,7 +42,16 @@ class HomePage extends StatelessWidget {
       endDrawer: const Drawer(),
       floatingActionButton: FloatingActionButton(
         child: const Icon(Icons.add),
-        onPressed: () {},
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) {
+                return const FormPage(isAdd: true);
+              },
+            ),
+          );
+        },
         backgroundColor: const Color(0xFF309CFF),
       ),
       body: CustomScrollView(

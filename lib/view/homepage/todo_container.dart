@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:todo_app/view/formpage/form_page.dart';
 
 class TodoContainer extends StatelessWidget {
   final String dayTitle;
@@ -127,6 +128,16 @@ class TodoContainer extends StatelessWidget {
               ),
             ),
             ListTile(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) {
+                      return const FormPage(isAdd: false);
+                    },
+                  ),
+                );
+              },
               leading: Checkbox(
                 shape: const StadiumBorder(),
                 activeColor: Colors.amber,
