@@ -16,23 +16,21 @@ class HomePage extends StatelessWidget {
   ];
 
   List<DropdownMenuItem<String>> dropdownMenuBuilder(List<String> menus) {
-    List<DropdownMenuItem<String>> items = [];
-    for (String element in menus) {
-      items.add(
-        DropdownMenuItem<String>(
-          value: element,
+    return menus.map(
+      (e) {
+        return DropdownMenuItem<String>(
           child: Text(
-            element,
+            e,
             style: const TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.w400,
               color: Colors.white,
             ),
           ),
-        ),
-      );
-    }
-    return items;
+          value: e,
+        );
+      },
+    ).toList();
   }
 
   @override
