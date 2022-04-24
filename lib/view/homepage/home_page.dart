@@ -38,6 +38,11 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       endDrawer: const Drawer(),
+      floatingActionButton: FloatingActionButton(
+        child: const Icon(Icons.add),
+        onPressed: () {},
+        backgroundColor: const Color(0xFF309CFF),
+      ),
       body: CustomScrollView(
         slivers: [
           SliverAppBar(
@@ -118,6 +123,7 @@ class HomePage extends StatelessWidget {
                   category: 'Semua',
                 );
               },
+              childCount: 10,
             ),
           ),
         ],
