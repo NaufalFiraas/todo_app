@@ -26,6 +26,7 @@ class HomePage extends StatelessWidget {
               fontSize: 18,
               fontWeight: FontWeight.w400,
               color: Colors.white,
+              fontFamily: 'Patrick Hand',
             ),
           ),
           value: e,
@@ -81,6 +82,7 @@ class HomePage extends StatelessWidget {
                       const Text(
                         'Senin',
                         style: TextStyle(
+                          fontFamily: 'Patrick Hand',
                           fontSize: 25,
                           fontWeight: FontWeight.w400,
                           color: Colors.white,
@@ -89,6 +91,7 @@ class HomePage extends StatelessWidget {
                       const Text(
                         '25-04-2022',
                         style: TextStyle(
+                          fontFamily: 'Patrick Hand',
                           fontSize: 18,
                           fontWeight: FontWeight.w400,
                           color: Colors.white,

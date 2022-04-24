@@ -36,12 +36,14 @@ class TodoContainer extends StatelessWidget {
               title: const Text(
                 'Hapus',
                 style: TextStyle(
+                  fontFamily: 'Patrick Hand',
                   color: Color(0xFF309CFF),
                 ),
               ),
               content: const Text(
                 'Yakin Hapus?',
                 style: TextStyle(
+                  fontFamily: 'Patrick Hand',
                   fontSize: 20,
                   fontWeight: FontWeight.w600,
                   color: Colors.black54,
@@ -52,6 +54,7 @@ class TodoContainer extends StatelessWidget {
                   child: const Text(
                     'Ya',
                     style: TextStyle(
+                      fontFamily: 'Patrick Hand',
                       fontSize: 18,
                       fontWeight: FontWeight.w500,
                       color: Color(0xFF309CFF),
@@ -63,6 +66,7 @@ class TodoContainer extends StatelessWidget {
                   child: const Text(
                     'Batal',
                     style: TextStyle(
+                      fontFamily: 'Patrick Hand',
                       fontSize: 18,
                       fontWeight: FontWeight.w500,
                       color: Color(0xFF309CFF),
@@ -115,6 +119,7 @@ class TodoContainer extends StatelessWidget {
               child: Text(
                 dayTitle,
                 style: const TextStyle(
+                  fontFamily: 'Patrick Hand',
                   fontSize: 18,
                   fontWeight: FontWeight.w400,
                   color: Colors.white,
@@ -131,6 +136,7 @@ class TodoContainer extends StatelessWidget {
               title: Text(
                 title,
                 style: const TextStyle(
+                  fontFamily: 'Patrick Hand',
                   fontSize: 18,
                   fontWeight: FontWeight.w400,
                   color: Color(0xFF309CFF),
@@ -145,6 +151,7 @@ class TodoContainer extends StatelessWidget {
                   Text(
                     description,
                     style: const TextStyle(
+                      fontFamily: 'Patrick Hand',
                       fontSize: 14,
                       fontWeight: FontWeight.w500,
                       color: Color(0xFF787875),
@@ -169,6 +176,7 @@ class TodoContainer extends StatelessWidget {
                         ' : ' +
                         minute.toString().padLeft(2, '0'),
                     style: const TextStyle(
+                      fontFamily: 'Patrick Hand',
                       fontSize: 14,
                       fontWeight: FontWeight.w400,
                       color: Color(0xFF787875),
@@ -180,6 +188,7 @@ class TodoContainer extends StatelessWidget {
                   Text(
                     category,
                     style: const TextStyle(
+                      fontFamily: 'Patrick Hand',
                       fontSize: 14,
                       fontWeight: FontWeight.w400,
                       color: Color(0xFF787875),
