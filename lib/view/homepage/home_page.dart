@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:todo_app/view/drawer/my_drawer.dart';
 import 'package:todo_app/view/formpage/form_page.dart';
 import 'package:todo_app/view/homepage/todo_container.dart';
 
@@ -39,7 +40,7 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      endDrawer: const Drawer(),
+      endDrawer: const MyDrawer(),
       floatingActionButton: FloatingActionButton(
         child: const Icon(Icons.add),
         onPressed: () {
