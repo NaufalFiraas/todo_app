@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:todo_app/view/aboutpage/about_page.dart';
 
 class MyDrawer extends StatelessWidget {
   const MyDrawer({Key? key}) : super(key: key);
@@ -24,7 +25,17 @@ class MyDrawer extends StatelessWidget {
                     color: Color(0xFF309CFF),
                   ),
                 ),
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.pop(context);
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) {
+                        return const AboutPage();
+                      },
+                    ),
+                  );
+                },
               ),
               const SizedBox(
                 width: 150,
