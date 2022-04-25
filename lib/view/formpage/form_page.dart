@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:todo_app/view/formpage/activity_description_form.dart';
+import 'package:intl/intl.dart';
 
 class FormPage extends StatefulWidget {
   final bool isAdd;
   final String? activity;
   final String? description;
-  final String? date;
+  final DateTime? date;
   final int? hour;
   final int? minute;
   final String? category;
@@ -37,6 +38,36 @@ class _FormPageState extends State<FormPage> {
       activityController.text = widget.activity.toString();
       descriptionController.text = widget.description.toString();
     }
+  }
+
+  final List<String> dropdownMenus = [
+    'Belanja',
+    'Kerja',
+    'Belajar',
+    'Travelling',
+    'Produktivitas',
+    'Hobi',
+    'Kuliner',
+    'Lainnya...',
+    'Semua',
+  ];
+
+  List<DropdownMenuItem<String>> dropdownMenuBuilder(List<String> menus) {
+    return menus.map(
+      (e) {
+        return DropdownMenuItem<String>(
+          value: e,
+          child: Text(
+            e,
+            style: const TextStyle(
+              fontFamily: 'Patrick Hand',
+              fontSize: 16,
+              color: Colors.black54,
+            ),
+          ),
+        );
+      },
+    ).toList();
   }
 
   @override
@@ -74,50 +105,148 @@ class _FormPageState extends State<FormPage> {
           ),
         ),
       ),
-      body: Form(
-        key: formKey,
-        child: Column(
-          children: [
-            const SizedBox(
-              height: 10,
-            ),
-            Container(
-              margin: const EdgeInsets.all(20),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  ActivityDescriptionForm(
-                    controller: activityController,
-                    title: 'Aktivitas:',
-                    validation: (value) {
-                      if (value == '') {
-                        return 'Wajib diisi!';
-                      }
-                      return null;
-                    },
-                  ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  ActivityDescriptionForm(
-                    controller: descriptionController,
-                    title: 'Deskripsi:',
-                  ),
-                  const SizedBox(
-                    height: 30,
-                  ),
-                  const Text(
-                    'Tanggal:',
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontFamily: 'Patrick Hand',
-                      color: Color(0xFF309CFF),
-                    ),
-                  ),
-                ],
+      body: SingleChildScrollView(
+        child: Form(
+          key: formKey,
+          child: Column(
+            children: [
+              const SizedBox(
+                height: 10,
               ),
-            ),
-          ],
+              Container(
+                margin: const EdgeInsets.all(20),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    ActivityDescriptionForm(
+                      controller: activityController,
+                      title: 'Aktivitas:',
+                      validation: (value) {
+                        if (value == '') {
+                          return 'Wajib diisi!';
+                        }
+                        return null;
+                      },
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    ActivityDescriptionForm(
+                      controller: descriptionController,
+                      title: 'Deskripsi:',
+                    ),
+                    const SizedBox(
+                      height: 30,
+                    ),
+                    const Text(
+                      'Tanggal:',
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontFamily: 'Patrick Hand',
+                        color: Color(0xFF309CFF),
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 5,
+                    ),
+                    Text(
+                      widget.date == null
+                          ? 'Tap di sini...'
+                          : DateFormat('dd/MMM/yyyy').format(widget.date!),
+                      style: const TextStyle(
+                        fontSize: 16,
+                        fontFamily: 'Patrick Hand',
+                        color: Colors.black54,
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 30,
+                    ),
+                    const Text(
+                      'Jam',
+                      style: TextStyle(
+                        fontFamily: 'Patrick Hand',
+                        fontSize: 18,
+                        color: Color(0xFF309CFF),
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 5,
+                    ),
+                    Text(
+                      widget.hour == null && widget.minute == null
+                          ? 'Tap di sini...'
+                          : widget.hour.toString().padLeft(2, '0') +
+                              ' : ' +
+                              widget.minute.toString().padLeft(2, '0'),
+                      style: const TextStyle(
+                        fontFamily: 'Patrick Hand',
+                        fontSize: 16,
+                        color: Colors.black54,
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 30,
+                    ),
+                    const Text(
+                      'Kategori:',
+                      style: TextStyle(
+                        fontFamily: 'Patrick Hand',
+                        fontSize: 18,
+                        color: Color(0xFF309CFF),
+                      ),
+                    ),
+                    DropdownButton(
+                      items: dropdownMenuBuilder(dropdownMenus),
+                      onChanged: (value) {},
+                      isExpanded: true,
+                      value: 'Semua',
+                    ),
+                    const SizedBox(
+                      height: 30,
+                    ),
+                    Align(
+                      alignment: Alignment.center,
+                      child: Container(
+                        width: 120,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(15),
+                          gradient: const LinearGradient(
+                            colors: [
+                              Color(0xFF309CFF),
+                              Color(0xFF044D90),
+                            ],
+                            begin: Alignment.centerLeft,
+                            end: Alignment.centerRight,
+                          ),
+                        ),
+                        child: ElevatedButton(
+                          child: Text(
+                            widget.isAdd ? 'Tambah' : 'Edit',
+                            style: const TextStyle(
+                              fontFamily: 'Patrick Hand',
+                              fontSize: 22,
+                              color: Colors.white,
+                            ),
+                          ),
+                          onPressed: () {
+                            formKey.currentState!.validate();
+                          },
+                          style: ElevatedButton.styleFrom(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(15),
+                            ),
+                            primary: Colors.transparent,
+                            shadowColor: Colors.transparent,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
