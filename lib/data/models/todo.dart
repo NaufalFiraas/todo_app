@@ -5,7 +5,8 @@ class Todo {
   final String title;
   final String description;
   final DateTime date;
-  final TimeOfDay time;
+  final int hour;
+  final int minute;
   final String category;
   final bool isFinished;
 
@@ -14,7 +15,8 @@ class Todo {
     required this.title,
     required this.description,
     required this.date,
-    required this.time,
+    required this.hour,
+    required this.minute,
     required this.category,
     required this.isFinished,
   });
@@ -25,7 +27,8 @@ class Todo {
       'title': title,
       'description': description,
       'date': date,
-      'time': time,
+      'hour': hour,
+      'minute': minute,
       'category': category,
       'isFinished': isFinished,
     };
@@ -33,6 +36,6 @@ class Todo {
 
   @override
   String toString() {
-    return 'Todo(id: $id, title: $title, description: $description, date: $date, time: $time, category: $category, isFinished: $isFinished)';
+    return 'Todo(id: $id, title: $title, description: $description, date: $date, hour: $hour, minute: $minute, category: $category, isFinished: $isFinished)';
   }
 }
