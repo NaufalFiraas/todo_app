@@ -7,7 +7,7 @@ class MyDrawer extends StatelessWidget {
   Widget build(BuildContext context) {
     return Drawer(
       child: SafeArea(
-        child: Container(
+        child: SizedBox(
           width: MediaQuery.of(context).size.width * 0.7,
           child: Column(
             children: [
