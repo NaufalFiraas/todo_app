@@ -7,8 +7,7 @@ class FormPage extends StatefulWidget {
   final String? activity;
   final String? description;
   final DateTime? date;
-  final int? hour;
-  final int? minute;
+  final TimeOfDay? time;
   final String? category;
 
   const FormPage({
@@ -17,8 +16,7 @@ class FormPage extends StatefulWidget {
     this.activity,
     this.description,
     this.date,
-    this.hour,
-    this.minute,
+    this.time,
     this.category,
   }) : super(key: key);
 
@@ -149,15 +147,27 @@ class _FormPageState extends State<FormPage> {
                     const SizedBox(
                       height: 5,
                     ),
-                    Text(
-                      widget.date == null
-                          ? 'Tap di sini...'
-                          : DateFormat('dd/MMM/yyyy').format(widget.date!),
-                      style: const TextStyle(
-                        fontSize: 16,
-                        fontFamily: 'Patrick Hand',
-                        color: Colors.black54,
+                    GestureDetector(
+                      child: Text(
+                        widget.date == null
+                            ? 'Tap di sini...'
+                            : DateFormat('dd/MMM/yyyy').format(widget.date!),
+                        style: const TextStyle(
+                          fontSize: 16,
+                          fontFamily: 'Patrick Hand',
+                          color: Colors.black54,
+                        ),
                       ),
+                      onTap: () {
+                        showDatePicker(
+                          context: context,
+                          firstDate: DateTime.now(),
+                          initialDate:
+                              widget.isAdd ? DateTime.now() : widget.date!,
+                          lastDate:
+                              DateTime.now().add(const Duration(days: 365)),
+                        ).then((value) => null);
+                      },
                     ),
                     const SizedBox(
                       height: 30,
@@ -173,17 +183,27 @@ class _FormPageState extends State<FormPage> {
                     const SizedBox(
                       height: 5,
                     ),
-                    Text(
-                      widget.hour == null && widget.minute == null
-                          ? 'Tap di sini...'
-                          : widget.hour.toString().padLeft(2, '0') +
-                              ' : ' +
-                              widget.minute.toString().padLeft(2, '0'),
-                      style: const TextStyle(
-                        fontFamily: 'Patrick Hand',
-                        fontSize: 16,
-                        color: Colors.black54,
+                    GestureDetector(
+                      child: Text(
+                        widget.time == null
+                            ? 'Tap di sini...'
+                            : widget.time!.hour.toString().padLeft(2, '0') +
+                                ' : ' +
+                                widget.time!.minute.toString().padLeft(2, '0'),
+                        style: const TextStyle(
+                          fontFamily: 'Patrick Hand',
+                          fontSize: 16,
+                          color: Colors.black54,
+                        ),
                       ),
+                      onTap: () {
+                        showTimePicker(
+                          context: context,
+                          initialTime: widget.time == null
+                              ? TimeOfDay.now()
+                              : widget.time!,
+                        ).then((value) => null);
+                      },
                     ),
                     const SizedBox(
                       height: 30,
