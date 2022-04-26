@@ -52,10 +52,14 @@ class DbHelper {
     );
   }
 
-  Future<List<Map<String, dynamic>>> getTodo() async {
+  Future<List<Map<String, dynamic>>> getTodo(String? category) async {
     final Database db = await dbInstance;
 
-    return await db.query('todo_table');
+    final String query = category == null
+        ? 'SELECT * FROM todo_table ORDER BY date ASC'
+        : 'SELECT * FROM todo_table WHERE category = $category ORDER BY date ASC';
+
+    return await db.rawQuery(query);
   }
 
   Future<void> deleteTodo(Todo todo) async {
