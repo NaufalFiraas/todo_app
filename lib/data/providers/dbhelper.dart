@@ -1,6 +1,8 @@
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 
+import '../models/todo.dart';
+
 class DbHelper {
   Database? _db;
 
@@ -26,6 +28,43 @@ class DbHelper {
           )
         ''');
       },
+    );
+  }
+
+  Future<void> insertTodo(Todo todo) async {
+    final Database db = await dbInstance;
+
+    db.insert(
+      'todo_table',
+      todo.toMap(),
+      conflictAlgorithm: ConflictAlgorithm.replace,
+    );
+  }
+
+  Future<void> updateTodo(Todo todo) async {
+    final Database db = await dbInstance;
+
+    db.update(
+      'todo_table',
+      todo.toMap(),
+      where: 'id = ?',
+      whereArgs: [todo.id],
+    );
+  }
+
+  Future<List<Map<String, dynamic>>> getTodo() async {
+    final Database db = await dbInstance;
+
+    return await db.query('todo_table');
+  }
+
+  Future<void> deleteTodo(Todo todo) async {
+    final Database db = await dbInstance;
+
+    db.delete(
+      'todo_table',
+      where: 'id = ?',
+      whereArgs: [todo.id],
     );
   }
 }
