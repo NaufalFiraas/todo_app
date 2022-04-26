@@ -29,7 +29,7 @@ class DbHelper {
     );
   }
 
-  Future<void> insertTodo(Map<String, dynamic> data) async {
+  Future<void> insertData(Map<String, dynamic> data) async {
     final Database db = await dbInstance;
 
     db.insert(
@@ -39,7 +39,7 @@ class DbHelper {
     );
   }
 
-  Future<void> updateTodo(Map<String, dynamic> data) async {
+  Future<void> updateData(Map<String, dynamic> data) async {
     final Database db = await dbInstance;
 
     db.update(
@@ -50,7 +50,7 @@ class DbHelper {
     );
   }
 
-  Future<List<Map<String, dynamic>>> getTodo(String? category) async {
+  Future<List<Map<String, dynamic>>> getData(String? category) async {
     final Database db = await dbInstance;
 
     final String query = category == null
@@ -60,7 +60,7 @@ class DbHelper {
     return await db.rawQuery(query);
   }
 
-  Future<void> deleteTodo(Map<String, dynamic> data) async {
+  Future<void> deleteData(Map<String, dynamic> data) async {
     final Database db = await dbInstance;
 
     db.delete(
