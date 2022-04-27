@@ -22,8 +22,8 @@ class TodoBloc extends Bloc<TodoEvent, TodoState> {
   void _getTodo(TodoGet event, Emitter<TodoState> emit) async {
     emit(TodoLoading());
     final List<Todo>? todoData = await todoRepo.getTodo(event.category);
-    todoData == null
-        ? emit(TodoLoaded(todos: todoData!))
+    todoData != null
+        ? emit(TodoLoaded(todos: todoData))
         : emit(TodoCrudFailed());
   }
 
