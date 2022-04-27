@@ -10,9 +10,9 @@ part 'todo_event.dart';
 part 'todo_state.dart';
 
 class TodoBloc extends Bloc<TodoEvent, TodoState> {
-  final TodoRepository todoRepo = TodoRepository();
+  final TodoRepository todoRepo;
 
-  TodoBloc() : super(TodoLoading()) {
+  TodoBloc(this.todoRepo) : super(TodoLoading()) {
     on<TodoGet>((event, emit) => _getTodo(event, emit));
     on<TodoAdd>((event, emit) => _addTodo(event, emit));
     on<TodoUpdate>((event, emit) => _updateTodo(event, emit));
@@ -22,8 +22,8 @@ class TodoBloc extends Bloc<TodoEvent, TodoState> {
   void _getTodo(TodoGet event, Emitter<TodoState> emit) async {
     emit(TodoLoading());
     final List<Todo>? todoData = await todoRepo.getTodo(event.category);
-    todoData == null
-        ? emit(TodoLoaded(todos: todoData!))
+    todoData != null
+        ? emit(TodoLoaded(todos: todoData))
         : emit(TodoCrudFailed());
   }
 
