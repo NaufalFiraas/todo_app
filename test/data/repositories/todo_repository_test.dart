@@ -10,8 +10,10 @@ void main() {
   late DbHelper dbHelper;
   late TodoRepository todoRepository;
   late Todo todo;
+  late DateTime date;
 
   setUp(() {
+    date = DateTime.now();
     dbHelper = MockDBHelper();
     todoRepository = TodoRepository(dbHelper);
     todo = Todo(
@@ -29,9 +31,141 @@ void main() {
   group('Insert Todo Method Tests: ', () {
     test('Success case: ', () async {
       when(() => dbHelper.insertData(todo.toMap()))
-          .thenAnswer((invocation) => Future.value());
+          .thenAnswer((_) => Future.value());
       bool insert = await todoRepository.insertTodo(todo);
       expect(insert, equals(true));
+    });
+
+    test('Failed case: ', () async {
+      when(() => dbHelper.insertData(todo.toMap())).thenThrow(Exception());
+      bool insert = await todoRepository.insertTodo(todo);
+      expect(insert, equals(false));
+    });
+  });
+
+  group('Update Todo Method Tests: ', () {
+    test('Success case: ', () async {
+      when(() => dbHelper.updateData(todo.toMap()))
+          .thenAnswer((_) => Future.value());
+      bool update = await todoRepository.updateTodo(todo);
+      expect(update, equals(true));
+    });
+
+    test('Failed case: ', () async {
+      when(() => dbHelper.updateData(todo.toMap())).thenThrow(Exception());
+      bool update = await todoRepository.updateTodo(todo);
+      expect(update, equals(false));
+    });
+  });
+
+  group('Delete Todo Method Tests: ', () {
+    test('Success case: ', () async {
+      when(() => dbHelper.deleteData(todo.toMap()))
+          .thenAnswer((_) => Future.value());
+      bool delete = await todoRepository.deleteTodo(todo);
+      expect(delete, equals(true));
+    });
+
+    test('Failed case: ', () async {
+      when(() => dbHelper.deleteData(todo.toMap())).thenThrow(Exception());
+      bool delete = await todoRepository.deleteTodo(todo);
+      expect(delete, equals(false));
+    });
+  });
+
+  group('Get Todo Method Tests: ', () {
+    test('No Data Case: ', () async {
+      when(() => dbHelper.getData(null))
+          .thenAnswer((invocation) => Future.value([]));
+      List<Todo>? getTodo = await todoRepository.getTodo(null);
+      expect(getTodo, equals([]));
+    });
+
+    test('Single Data Case: ', () async {
+      when(() => dbHelper.getData(null)).thenAnswer((_) => Future.value([
+            {
+              'id': 0,
+              'title': 'title test',
+              'description': 'description test',
+              'date': date,
+              'hour': 17,
+              'minute': 25,
+              'category': 'category test',
+              'isFinished': false,
+            },
+          ]));
+      List<Todo>? getTodo = await todoRepository.getTodo(null);
+      expect(
+        getTodo,
+        equals([
+          Todo(
+            id: 0,
+            title: 'title test',
+            description: 'description test',
+            date: date,
+            hour: 17,
+            minute: 25,
+            category: 'category test',
+            isFinished: false,
+          ),
+        ]),
+      );
+    });
+
+    test('Multi Data Case: ', () async {
+      when(() => dbHelper.getData(null)).thenAnswer((_) => Future.value([
+            {
+              'id': 0,
+              'title': 'title test',
+              'description': 'description test',
+              'date': date,
+              'hour': 17,
+              'minute': 25,
+              'category': 'category test',
+              'isFinished': false,
+            },
+            {
+              'id': 1,
+              'title': 'title1 test',
+              'description': 'description1 test',
+              'date': date,
+              'hour': 18,
+              'minute': 26,
+              'category': 'category1 test',
+              'isFinished': true,
+            },
+          ]));
+      List<Todo>? getTodo = await todoRepository.getTodo(null);
+      expect(
+          getTodo,
+          equals([
+            Todo(
+              id: 0,
+              title: 'title test',
+              description: 'description test',
+              date: date,
+              hour: 17,
+              minute: 25,
+              category: 'category test',
+              isFinished: false,
+            ),
+            Todo(
+              id: 1,
+              title: 'title1 test',
+              description: 'description1 test',
+              date: date,
+              hour: 18,
+              minute: 26,
+              category: 'category1 test',
+              isFinished: true,
+            ),
+          ]));
+    });
+
+    test('Failed Case: ', () async {
+      when(() => dbHelper.getData(null)).thenThrow(Exception());
+      List<Todo>? getTodo = await todoRepository.getTodo(null);
+      expect(getTodo, equals(null));
     });
   });
 }
