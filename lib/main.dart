@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:todo_app/blocs/date_cubit/date_cubit.dart';
 import 'package:todo_app/blocs/todo_bloc/todo_bloc.dart';
 import 'package:todo_app/data/providers/dbhelper.dart';
 import 'package:todo_app/data/repositories/todo_repository.dart';
@@ -34,6 +35,7 @@ class _MyAppState extends State<MyApp> {
         BlocProvider<TodoBloc>(
           create: (context) => TodoBloc(todoRepo)..add(const TodoGet()),
         ),
+        BlocProvider<DateCubit>(create: (context) => DateCubit()),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
