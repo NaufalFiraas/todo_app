@@ -1,23 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:todo_app/blocs/date_cubit/date_cubit.dart';
+import 'package:todo_app/data/models/todo.dart';
 import 'package:todo_app/view/formpage/activity_description_form.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 
 class FormPage extends StatefulWidget {
   final bool isAdd;
-  final String? activity;
-  final String? description;
-  final DateTime? date;
-  final TimeOfDay? time;
-  final String? category;
+  final Todo? todo;
 
   const FormPage({
     Key? key,
     required this.isAdd,
-    this.activity,
-    this.description,
-    this.date,
-    this.time,
-    this.category,
+    this.todo,
   }) : super(key: key);
 
   @override
@@ -32,10 +27,21 @@ class _FormPageState extends State<FormPage> {
   @override
   void initState() {
     super.initState();
+
+    /// kalau masuk sebagai edit, set activity dan description controller sesuai todo yang masuk:
     if (!widget.isAdd) {
-      activityController.text = widget.activity.toString();
-      descriptionController.text = widget.description.toString();
+      activityController.text = widget.todo!.title.toString();
+      descriptionController.text = widget.todo!.description.toString();
     }
+  }
+
+  @override
+  void didChangeDependencies() {
+    /// kalau masuk sebagai edit, set date sesuai todo yang masuk:
+    if (!widget.isAdd) {
+      context.read<DateCubit>().changeDate(widget.todo!.date);
+    }
+    super.didChangeDependencies();
   }
 
   final List<String> dropdownMenus = [
@@ -70,6 +76,8 @@ class _FormPageState extends State<FormPage> {
 
   @override
   Widget build(BuildContext context) {
+    final DateCubit dateCubit = context.watch<DateCubit>();
+
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -149,9 +157,7 @@ class _FormPageState extends State<FormPage> {
                     ),
                     GestureDetector(
                       child: Text(
-                        widget.date == null
-                            ? 'Tap di sini...'
-                            : DateFormat('dd/MMM/yyyy').format(widget.date!),
+                        DateFormat('dd/MMM/yyyy').format(dateCubit.state.date),
                         style: const TextStyle(
                           fontSize: 16,
                           fontFamily: 'Patrick Hand',
@@ -162,11 +168,10 @@ class _FormPageState extends State<FormPage> {
                         showDatePicker(
                           context: context,
                           firstDate: DateTime.now(),
-                          initialDate:
-                              widget.isAdd ? DateTime.now() : widget.date!,
+                          initialDate: dateCubit.state.date,
                           lastDate:
                               DateTime.now().add(const Duration(days: 365)),
-                        ).then((value) => null);
+                        ).then((value) => dateCubit.changeDate(value));
                       },
                     ),
                     const SizedBox(
