@@ -36,8 +36,6 @@ class _MyAppState extends State<MyApp> {
         BlocProvider<TodoBloc>(
           create: (context) => TodoBloc(todoRepo)..add(const TodoGet()),
         ),
-        BlocProvider<DateCubit>(create: (context) => DateCubit()),
-        BlocProvider<TimeCubit>(create: (context) => TimeCubit()),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,

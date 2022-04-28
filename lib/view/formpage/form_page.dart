@@ -36,17 +36,6 @@ class _FormPageState extends State<FormPage> {
     }
   }
 
-  @override
-  void didChangeDependencies() {
-    /// kalau masuk sebagai edit, set date sesuai todo yang masuk:
-    if (!widget.isAdd) {
-      context.read<DateCubit>().changeDate(widget.todo!.date);
-      context.read<TimeCubit>().changeTime(
-          TimeOfDay(hour: widget.todo!.hour, minute: widget.todo!.minute));
-    }
-    super.didChangeDependencies();
-  }
-
   final List<String> dropdownMenus = [
     'Belanja',
     'Kerja',
@@ -79,202 +68,233 @@ class _FormPageState extends State<FormPage> {
 
   @override
   Widget build(BuildContext context) {
-    final DateCubit dateCubit = context.watch<DateCubit>();
-    final TimeCubit timeCubit = context.watch<TimeCubit>();
-
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          widget.isAdd ? 'Tambah Todo' : 'Edit Todo',
-          style: const TextStyle(
-            fontFamily: 'Patrick Hand',
-            fontSize: 25,
-            color: Colors.white,
-          ),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider<DateCubit>(
+          create: (context) {
+            if (widget.isAdd) {
+              return DateCubit();
+            } else {
+              return DateCubit()..changeDate(widget.todo!.date);
+            }
+          },
         ),
-        shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.only(
-            bottomLeft: Radius.circular(15),
-            bottomRight: Radius.circular(15),
-          ),
+        BlocProvider<TimeCubit>(
+          create: (context) {
+            if (widget.isAdd) {
+              return TimeCubit();
+            } else {
+              return TimeCubit()
+                ..changeTime(
+                  TimeOfDay(
+                      hour: widget.todo!.hour, minute: widget.todo!.minute),
+                );
+            }
+          },
         ),
-        flexibleSpace: Container(
-          decoration: const BoxDecoration(
-            gradient: LinearGradient(
-              colors: [
-                Color(0xFF309CFF),
-                Color(0xFF044D90),
-              ],
-              begin: Alignment.centerLeft,
-              end: Alignment.centerRight,
+      ],
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text(
+            widget.isAdd ? 'Tambah Todo' : 'Edit Todo',
+            style: const TextStyle(
+              fontFamily: 'Patrick Hand',
+              fontSize: 25,
+              color: Colors.white,
             ),
+          ),
+          shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.only(
               bottomLeft: Radius.circular(15),
               bottomRight: Radius.circular(15),
             ),
           ),
-        ),
-      ),
-      body: SingleChildScrollView(
-        child: Form(
-          key: formKey,
-          child: Column(
-            children: [
-              const SizedBox(
-                height: 10,
+          flexibleSpace: Container(
+            decoration: const BoxDecoration(
+              gradient: LinearGradient(
+                colors: [
+                  Color(0xFF309CFF),
+                  Color(0xFF044D90),
+                ],
+                begin: Alignment.centerLeft,
+                end: Alignment.centerRight,
               ),
-              Container(
-                margin: const EdgeInsets.all(20),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    ActivityDescriptionForm(
-                      controller: activityController,
-                      title: 'Aktivitas:',
-                      validation: (value) {
-                        if (value == '') {
-                          return 'Wajib diisi!';
-                        }
-                        return null;
-                      },
-                    ),
-                    const SizedBox(
-                      height: 20,
-                    ),
-                    ActivityDescriptionForm(
-                      controller: descriptionController,
-                      title: 'Deskripsi:',
-                    ),
-                    const SizedBox(
-                      height: 30,
-                    ),
-                    const Text(
-                      'Tanggal:',
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontFamily: 'Patrick Hand',
-                        color: Color(0xFF309CFF),
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 5,
-                    ),
-                    GestureDetector(
-                      child: Text(
-                        DateFormat('dd/MMM/yyyy').format(dateCubit.state.date),
-                        style: const TextStyle(
-                          fontSize: 16,
-                          fontFamily: 'Patrick Hand',
-                          color: Colors.black54,
-                        ),
-                      ),
-                      onTap: () {
-                        showDatePicker(
-                          context: context,
-                          firstDate: DateTime.now(),
-                          initialDate: dateCubit.state.date,
-                          lastDate:
-                              DateTime.now().add(const Duration(days: 365)),
-                        ).then((value) => dateCubit.changeDate(value));
-                      },
-                    ),
-                    const SizedBox(
-                      height: 30,
-                    ),
-                    const Text(
-                      'Jam',
-                      style: TextStyle(
-                        fontFamily: 'Patrick Hand',
-                        fontSize: 18,
-                        color: Color(0xFF309CFF),
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 5,
-                    ),
-                    GestureDetector(
-                      child: Text(
-                        timeCubit.state.time.hour.toString().padLeft(2, '0') +
-                            ' : ' +
-                            timeCubit.state.time.minute
-                                .toString()
-                                .padLeft(2, '0'),
-                        style: const TextStyle(
-                          fontFamily: 'Patrick Hand',
-                          fontSize: 16,
-                          color: Colors.black54,
-                        ),
-                      ),
-                      onTap: () {
-                        showTimePicker(
-                          context: context,
-                          initialTime: timeCubit.state.time,
-                        ).then((value) => timeCubit.changeTime(value));
-                      },
-                    ),
-                    const SizedBox(
-                      height: 30,
-                    ),
-                    const Text(
-                      'Kategori:',
-                      style: TextStyle(
-                        fontFamily: 'Patrick Hand',
-                        fontSize: 18,
-                        color: Color(0xFF309CFF),
-                      ),
-                    ),
-                    DropdownButton(
-                      items: dropdownMenuBuilder(dropdownMenus),
-                      onChanged: (value) {},
-                      isExpanded: true,
-                      value: 'Semua',
-                    ),
-                    const SizedBox(
-                      height: 30,
-                    ),
-                    Align(
-                      alignment: Alignment.center,
-                      child: Container(
-                        width: 120,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(15),
-                          gradient: const LinearGradient(
-                            colors: [
-                              Color(0xFF309CFF),
-                              Color(0xFF044D90),
-                            ],
-                            begin: Alignment.centerLeft,
-                            end: Alignment.centerRight,
-                          ),
-                        ),
-                        child: ElevatedButton(
-                          child: Text(
-                            widget.isAdd ? 'Tambah' : 'Edit',
-                            style: const TextStyle(
-                              fontFamily: 'Patrick Hand',
-                              fontSize: 22,
-                              color: Colors.white,
-                            ),
-                          ),
-                          onPressed: () {
-                            formKey.currentState!.validate();
-                          },
-                          style: ElevatedButton.styleFrom(
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(15),
-                            ),
-                            primary: Colors.transparent,
-                            shadowColor: Colors.transparent,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
+              borderRadius: BorderRadius.only(
+                bottomLeft: Radius.circular(15),
+                bottomRight: Radius.circular(15),
               ),
-            ],
+            ),
           ),
         ),
+        body: Builder(builder: (context) {
+          final DateCubit dateCubit = context.watch<DateCubit>();
+          final TimeCubit timeCubit = context.watch<TimeCubit>();
+
+          return SingleChildScrollView(
+            child: Form(
+              key: formKey,
+              child: Column(
+                children: [
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  Container(
+                    margin: const EdgeInsets.all(20),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        ActivityDescriptionForm(
+                          controller: activityController,
+                          title: 'Aktivitas:',
+                          validation: (value) {
+                            if (value == '') {
+                              return 'Wajib diisi!';
+                            }
+                            return null;
+                          },
+                        ),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        ActivityDescriptionForm(
+                          controller: descriptionController,
+                          title: 'Deskripsi:',
+                        ),
+                        const SizedBox(
+                          height: 30,
+                        ),
+                        const Text(
+                          'Tanggal:',
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontFamily: 'Patrick Hand',
+                            color: Color(0xFF309CFF),
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 5,
+                        ),
+                        GestureDetector(
+                          child: Text(
+                            DateFormat('dd/MMM/yyyy')
+                                .format(dateCubit.state.date),
+                            style: const TextStyle(
+                              fontSize: 16,
+                              fontFamily: 'Patrick Hand',
+                              color: Colors.black54,
+                            ),
+                          ),
+                          onTap: () {
+                            showDatePicker(
+                              context: context,
+                              firstDate: DateTime.now(),
+                              initialDate: dateCubit.state.date,
+                              lastDate:
+                                  DateTime.now().add(const Duration(days: 365)),
+                            ).then((value) => dateCubit.changeDate(value));
+                          },
+                        ),
+                        const SizedBox(
+                          height: 30,
+                        ),
+                        const Text(
+                          'Jam',
+                          style: TextStyle(
+                            fontFamily: 'Patrick Hand',
+                            fontSize: 18,
+                            color: Color(0xFF309CFF),
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 5,
+                        ),
+                        GestureDetector(
+                          child: Text(
+                            timeCubit.state.time.hour
+                                    .toString()
+                                    .padLeft(2, '0') +
+                                ' : ' +
+                                timeCubit.state.time.minute
+                                    .toString()
+                                    .padLeft(2, '0'),
+                            style: const TextStyle(
+                              fontFamily: 'Patrick Hand',
+                              fontSize: 16,
+                              color: Colors.black54,
+                            ),
+                          ),
+                          onTap: () {
+                            showTimePicker(
+                              context: context,
+                              initialTime: timeCubit.state.time,
+                            ).then((value) => timeCubit.changeTime(value));
+                          },
+                        ),
+                        const SizedBox(
+                          height: 30,
+                        ),
+                        const Text(
+                          'Kategori:',
+                          style: TextStyle(
+                            fontFamily: 'Patrick Hand',
+                            fontSize: 18,
+                            color: Color(0xFF309CFF),
+                          ),
+                        ),
+                        DropdownButton(
+                          items: dropdownMenuBuilder(dropdownMenus),
+                          onChanged: (value) {},
+                          isExpanded: true,
+                          value: 'Semua',
+                        ),
+                        const SizedBox(
+                          height: 30,
+                        ),
+                        Align(
+                          alignment: Alignment.center,
+                          child: Container(
+                            width: 120,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(15),
+                              gradient: const LinearGradient(
+                                colors: [
+                                  Color(0xFF309CFF),
+                                  Color(0xFF044D90),
+                                ],
+                                begin: Alignment.centerLeft,
+                                end: Alignment.centerRight,
+                              ),
+                            ),
+                            child: ElevatedButton(
+                              child: Text(
+                                widget.isAdd ? 'Tambah' : 'Edit',
+                                style: const TextStyle(
+                                  fontFamily: 'Patrick Hand',
+                                  fontSize: 22,
+                                  color: Colors.white,
+                                ),
+                              ),
+                              onPressed: () {
+                                formKey.currentState!.validate();
+                              },
+                              style: ElevatedButton.styleFrom(
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(15),
+                                ),
+                                primary: Colors.transparent,
+                                shadowColor: Colors.transparent,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          );
+        }),
       ),
     );
   }
