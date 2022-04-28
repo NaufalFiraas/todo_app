@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:todo_app/blocs/date_cubit/date_cubit.dart';
+import 'package:todo_app/blocs/time_cubit/time_cubit.dart';
 import 'package:todo_app/data/models/todo.dart';
 import 'package:todo_app/view/formpage/activity_description_form.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -40,6 +41,8 @@ class _FormPageState extends State<FormPage> {
     /// kalau masuk sebagai edit, set date sesuai todo yang masuk:
     if (!widget.isAdd) {
       context.read<DateCubit>().changeDate(widget.todo!.date);
+      context.read<TimeCubit>().changeTime(
+          TimeOfDay(hour: widget.todo!.hour, minute: widget.todo!.minute));
     }
     super.didChangeDependencies();
   }
@@ -77,6 +80,7 @@ class _FormPageState extends State<FormPage> {
   @override
   Widget build(BuildContext context) {
     final DateCubit dateCubit = context.watch<DateCubit>();
+    final TimeCubit timeCubit = context.watch<TimeCubit>();
 
     return Scaffold(
       appBar: AppBar(
@@ -190,11 +194,11 @@ class _FormPageState extends State<FormPage> {
                     ),
                     GestureDetector(
                       child: Text(
-                        widget.time == null
-                            ? 'Tap di sini...'
-                            : widget.time!.hour.toString().padLeft(2, '0') +
-                                ' : ' +
-                                widget.time!.minute.toString().padLeft(2, '0'),
+                        timeCubit.state.time.hour.toString().padLeft(2, '0') +
+                            ' : ' +
+                            timeCubit.state.time.minute
+                                .toString()
+                                .padLeft(2, '0'),
                         style: const TextStyle(
                           fontFamily: 'Patrick Hand',
                           fontSize: 16,
@@ -204,10 +208,8 @@ class _FormPageState extends State<FormPage> {
                       onTap: () {
                         showTimePicker(
                           context: context,
-                          initialTime: widget.time == null
-                              ? TimeOfDay.now()
-                              : widget.time!,
-                        ).then((value) => null);
+                          initialTime: timeCubit.state.time,
+                        ).then((value) => timeCubit.changeTime(value));
                       },
                     ),
                     const SizedBox(
