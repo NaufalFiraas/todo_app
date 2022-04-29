@@ -16,6 +16,7 @@ class DbHelper {
         return database.execute('''
           CREATE TABLE todo_table(
             id INTEGER PRIMARY KEY,
+            dateTitle TEXT,
             title TEXT,
             description TEXT,
             date DATETIME,

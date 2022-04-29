@@ -19,6 +19,7 @@ void main() {
     todoBloc = TodoBloc(todoRepo);
     todo = Todo(
       id: 0,
+      dateTitle: 'dateTitle test',
       title: 'title test',
       description: 'description test',
       date: date,

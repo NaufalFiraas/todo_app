@@ -34,6 +34,7 @@ class TodoRepository {
         (index) {
           return Todo(
             id: rawData[index]['id'],
+            dateTitle: rawData[index]['dateTitle'],
             title: rawData[index]['title'],
             description: rawData[index]['description'],
             date: rawData[index]['date'],

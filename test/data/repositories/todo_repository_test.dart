@@ -18,6 +18,7 @@ void main() {
     todoRepository = TodoRepository(dbHelper);
     todo = Todo(
       id: 0,
+      dateTitle: 'dateTitle test',
       title: 'title test',
       description: 'description test',
       date: DateTime.now(),
@@ -85,6 +86,7 @@ void main() {
       when(() => dbHelper.getData(null)).thenAnswer((_) => Future.value([
             {
               'id': 0,
+              'dateTitle': 'dateTitle test',
               'title': 'title test',
               'description': 'description test',
               'date': date,
@@ -100,6 +102,7 @@ void main() {
         equals([
           Todo(
             id: 0,
+            dateTitle: 'dateTitle test',
             title: 'title test',
             description: 'description test',
             date: date,
@@ -116,6 +119,7 @@ void main() {
       when(() => dbHelper.getData(null)).thenAnswer((_) => Future.value([
             {
               'id': 0,
+              'dateTitle': 'dateTitle test',
               'title': 'title test',
               'description': 'description test',
               'date': date,
@@ -126,6 +130,7 @@ void main() {
             },
             {
               'id': 1,
+              'dateTitle': 'dateTitle1 test',
               'title': 'title1 test',
               'description': 'description1 test',
               'date': date,
@@ -141,6 +146,7 @@ void main() {
           equals([
             Todo(
               id: 0,
+              dateTitle: 'dateTitle test',
               title: 'title test',
               description: 'description test',
               date: date,
@@ -151,6 +157,7 @@ void main() {
             ),
             Todo(
               id: 1,
+              dateTitle: 'dateTitle1 test',
               title: 'title1 test',
               description: 'description1 test',
               date: date,
