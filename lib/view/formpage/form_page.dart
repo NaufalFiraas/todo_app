@@ -130,55 +130,54 @@ class _FormPageState extends State<FormPage> {
             ),
           ),
         ),
-        body: Builder(builder: (context) {
-          final DateCubit dateCubit = context.watch<DateCubit>();
-          final TimeCubit timeCubit = context.watch<TimeCubit>();
+        body: SingleChildScrollView(
+          child: Form(
+            key: formKey,
+            child: Column(
+              children: [
+                const SizedBox(
+                  height: 10,
+                ),
+                Container(
+                  margin: const EdgeInsets.all(20),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      ActivityDescriptionForm(
+                        controller: activityController,
+                        title: 'Aktivitas:',
+                        validation: (value) {
+                          if (value == '') {
+                            return 'Wajib diisi!';
+                          }
+                          return null;
+                        },
+                      ),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      ActivityDescriptionForm(
+                        controller: descriptionController,
+                        title: 'Deskripsi:',
+                      ),
+                      const SizedBox(
+                        height: 30,
+                      ),
+                      const Text(
+                        'Tanggal:',
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontFamily: 'Patrick Hand',
+                          color: Color(0xFF309CFF),
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 5,
+                      ),
+                      Builder(builder: (context) {
+                        final DateCubit dateCubit = context.watch<DateCubit>();
 
-          return SingleChildScrollView(
-            child: Form(
-              key: formKey,
-              child: Column(
-                children: [
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  Container(
-                    margin: const EdgeInsets.all(20),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        ActivityDescriptionForm(
-                          controller: activityController,
-                          title: 'Aktivitas:',
-                          validation: (value) {
-                            if (value == '') {
-                              return 'Wajib diisi!';
-                            }
-                            return null;
-                          },
-                        ),
-                        const SizedBox(
-                          height: 20,
-                        ),
-                        ActivityDescriptionForm(
-                          controller: descriptionController,
-                          title: 'Deskripsi:',
-                        ),
-                        const SizedBox(
-                          height: 30,
-                        ),
-                        const Text(
-                          'Tanggal:',
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontFamily: 'Patrick Hand',
-                            color: Color(0xFF309CFF),
-                          ),
-                        ),
-                        const SizedBox(
-                          height: 5,
-                        ),
-                        GestureDetector(
+                        return GestureDetector(
                           child: Text(
                             DateFormat('dd/MMM/yyyy')
                                 .format(dateCubit.state.date),
@@ -197,22 +196,26 @@ class _FormPageState extends State<FormPage> {
                                   DateTime.now().add(const Duration(days: 365)),
                             ).then((value) => dateCubit.changeDate(value));
                           },
+                        );
+                      }),
+                      const SizedBox(
+                        height: 30,
+                      ),
+                      const Text(
+                        'Jam',
+                        style: TextStyle(
+                          fontFamily: 'Patrick Hand',
+                          fontSize: 18,
+                          color: Color(0xFF309CFF),
                         ),
-                        const SizedBox(
-                          height: 30,
-                        ),
-                        const Text(
-                          'Jam',
-                          style: TextStyle(
-                            fontFamily: 'Patrick Hand',
-                            fontSize: 18,
-                            color: Color(0xFF309CFF),
-                          ),
-                        ),
-                        const SizedBox(
-                          height: 5,
-                        ),
-                        GestureDetector(
+                      ),
+                      const SizedBox(
+                        height: 5,
+                      ),
+                      Builder(builder: (context) {
+                        final TimeCubit timeCubit = context.watch<TimeCubit>();
+
+                        return GestureDetector(
                           child: Text(
                             timeCubit.state.time.hour
                                     .toString()
@@ -233,83 +236,83 @@ class _FormPageState extends State<FormPage> {
                               initialTime: timeCubit.state.time,
                             ).then((value) => timeCubit.changeTime(value));
                           },
+                        );
+                      }),
+                      const SizedBox(
+                        height: 30,
+                      ),
+                      const Text(
+                        'Kategori:',
+                        style: TextStyle(
+                          fontFamily: 'Patrick Hand',
+                          fontSize: 18,
+                          color: Color(0xFF309CFF),
                         ),
-                        const SizedBox(
-                          height: 30,
-                        ),
-                        const Text(
-                          'Kategori:',
-                          style: TextStyle(
-                            fontFamily: 'Patrick Hand',
-                            fontSize: 18,
-                            color: Color(0xFF309CFF),
-                          ),
-                        ),
-                        Builder(
-                          builder: (context) {
-                            final CategoryCubit categoryCubit =
-                                context.watch<CategoryCubit>();
+                      ),
+                      Builder(
+                        builder: (context) {
+                          final CategoryCubit categoryCubit =
+                              context.watch<CategoryCubit>();
 
-                            return DropdownButton<String>(
-                              items: dropdownMenuBuilder(dropdownMenus),
-                              onChanged: (value) {
-                                if (value != null) {
-                                  categoryCubit.changeCategory(value);
-                                }
-                              },
-                              isExpanded: true,
-                              value: categoryCubit.state.categoryValue,
-                            );
-                          },
-                        ),
-                        const SizedBox(
-                          height: 30,
-                        ),
-                        Align(
-                          alignment: Alignment.center,
-                          child: Container(
-                            width: 120,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(15),
-                              gradient: const LinearGradient(
-                                colors: [
-                                  Color(0xFF309CFF),
-                                  Color(0xFF044D90),
-                                ],
-                                begin: Alignment.centerLeft,
-                                end: Alignment.centerRight,
+                          return DropdownButton<String>(
+                            items: dropdownMenuBuilder(dropdownMenus),
+                            onChanged: (value) {
+                              if (value != null) {
+                                categoryCubit.changeCategory(value);
+                              }
+                            },
+                            isExpanded: true,
+                            value: categoryCubit.state.categoryValue,
+                          );
+                        },
+                      ),
+                      const SizedBox(
+                        height: 30,
+                      ),
+                      Align(
+                        alignment: Alignment.center,
+                        child: Container(
+                          width: 120,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(15),
+                            gradient: const LinearGradient(
+                              colors: [
+                                Color(0xFF309CFF),
+                                Color(0xFF044D90),
+                              ],
+                              begin: Alignment.centerLeft,
+                              end: Alignment.centerRight,
+                            ),
+                          ),
+                          child: ElevatedButton(
+                            child: Text(
+                              widget.isAdd ? 'Tambah' : 'Edit',
+                              style: const TextStyle(
+                                fontFamily: 'Patrick Hand',
+                                fontSize: 22,
+                                color: Colors.white,
                               ),
                             ),
-                            child: ElevatedButton(
-                              child: Text(
-                                widget.isAdd ? 'Tambah' : 'Edit',
-                                style: const TextStyle(
-                                  fontFamily: 'Patrick Hand',
-                                  fontSize: 22,
-                                  color: Colors.white,
-                                ),
+                            onPressed: () {
+                              formKey.currentState!.validate();
+                            },
+                            style: ElevatedButton.styleFrom(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(15),
                               ),
-                              onPressed: () {
-                                formKey.currentState!.validate();
-                              },
-                              style: ElevatedButton.styleFrom(
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(15),
-                                ),
-                                primary: Colors.transparent,
-                                shadowColor: Colors.transparent,
-                              ),
+                              primary: Colors.transparent,
+                              shadowColor: Colors.transparent,
                             ),
                           ),
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
-          );
-        }),
+          ),
+        ),
       ),
     );
   }
