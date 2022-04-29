@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:todo_app/blocs/category_cubit/category_cubit.dart';
 import 'package:todo_app/blocs/date_cubit/date_cubit.dart';
 import 'package:todo_app/blocs/time_cubit/time_cubit.dart';
 import 'package:todo_app/data/models/todo.dart';
@@ -45,7 +46,6 @@ class _FormPageState extends State<FormPage> {
     'Hobi',
     'Kuliner',
     'Lainnya...',
-    'Semua',
   ];
 
   List<DropdownMenuItem<String>> dropdownMenuBuilder(List<String> menus) {
@@ -68,6 +68,8 @@ class _FormPageState extends State<FormPage> {
 
   @override
   Widget build(BuildContext context) {
+    print('build form');
+
     return MultiBlocProvider(
       providers: [
         BlocProvider<DateCubit>(
@@ -92,6 +94,8 @@ class _FormPageState extends State<FormPage> {
             }
           },
         ),
+        BlocProvider(
+            create: (context) => CategoryCubit()..changeCategory('Lainnya...')),
       ],
       child: Scaffold(
         appBar: AppBar(
@@ -241,11 +245,22 @@ class _FormPageState extends State<FormPage> {
                             color: Color(0xFF309CFF),
                           ),
                         ),
-                        DropdownButton(
-                          items: dropdownMenuBuilder(dropdownMenus),
-                          onChanged: (value) {},
-                          isExpanded: true,
-                          value: 'Semua',
+                        Builder(
+                          builder: (context) {
+                            final CategoryCubit categoryCubit =
+                                context.watch<CategoryCubit>();
+
+                            return DropdownButton<String>(
+                              items: dropdownMenuBuilder(dropdownMenus),
+                              onChanged: (value) {
+                                if (value != null) {
+                                  categoryCubit.changeCategory(value);
+                                }
+                              },
+                              isExpanded: true,
+                              value: categoryCubit.state.categoryValue,
+                            );
+                          },
                         ),
                         const SizedBox(
                           height: 30,
