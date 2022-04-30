@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:todo_app/blocs/category_cubit/category_cubit.dart';
 import 'package:todo_app/blocs/date_cubit/date_cubit.dart';
 import 'package:todo_app/blocs/time_cubit/time_cubit.dart';
+import 'package:todo_app/blocs/todo_bloc/todo_bloc.dart';
 import 'package:todo_app/data/models/todo.dart';
 import 'package:todo_app/view/formpage/activity_description_form.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -284,26 +285,71 @@ class _FormPageState extends State<FormPage> {
                               end: Alignment.centerRight,
                             ),
                           ),
-                          child: ElevatedButton(
-                            child: Text(
-                              widget.isAdd ? 'Tambah' : 'Edit',
-                              style: const TextStyle(
-                                fontFamily: 'Patrick Hand',
-                                fontSize: 22,
-                                color: Colors.white,
+                          child: Builder(builder: (context) {
+                            return ElevatedButton(
+                              child:
+                                  context.watch<TodoBloc>().state is TodoLoading
+                                      ? const Center(
+                                          child: SizedBox(
+                                            height: 22,
+                                            width: 22,
+                                            child: CircularProgressIndicator(
+                                              color: Colors.white,
+                                            ),
+                                          ),
+                                        )
+                                      : Text(
+                                          widget.isAdd ? 'Tambah' : 'Edit',
+                                          style: const TextStyle(
+                                            fontFamily: 'Patrick Hand',
+                                            fontSize: 22,
+                                            color: Colors.white,
+                                          ),
+                                        ),
+                              onPressed: () {
+                                if (formKey.currentState!.validate()) {
+                                  context.read<TodoBloc>().add(
+                                        TodoAdd(
+                                          todo: Todo(
+                                            id: 0,
+                                            dateTitle: '',
+                                            title: activityController.text,
+                                            description:
+                                                descriptionController.text,
+                                            date: context
+                                                .read<DateCubit>()
+                                                .state
+                                                .date,
+                                            hour: context
+                                                .read<TimeCubit>()
+                                                .state
+                                                .time
+                                                .hour,
+                                            minute: context
+                                                .read<TimeCubit>()
+                                                .state
+                                                .time
+                                                .minute,
+                                            category: context
+                                                .read<CategoryCubit>()
+                                                .state
+                                                .categoryValue,
+                                            isFinished: false,
+                                          ),
+                                        ),
+                                      );
+                                  Navigator.pop(context);
+                                }
+                              },
+                              style: ElevatedButton.styleFrom(
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(15),
+                                ),
+                                primary: Colors.transparent,
+                                shadowColor: Colors.transparent,
                               ),
-                            ),
-                            onPressed: () {
-                              formKey.currentState!.validate();
-                            },
-                            style: ElevatedButton.styleFrom(
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(15),
-                              ),
-                              primary: Colors.transparent,
-                              shadowColor: Colors.transparent,
-                            ),
-                          ),
+                            );
+                          }),
                         ),
                       ),
                     ],

@@ -33,7 +33,7 @@ class TodoRepository {
         rawData.length,
         (index) {
           String dateTitleValue;
-          DateTime date = rawData[index]['date'];
+          DateTime date = DateTime.parse(rawData[index]['date']);
           DateTime dateNow = DateTime.now();
           DateTime sameDayNextWeek =
               DateTime.now().add(const Duration(days: 7));
@@ -66,16 +66,17 @@ class TodoRepository {
             dateTitle: dateTitleValue,
             title: rawData[index]['title'],
             description: rawData[index]['description'],
-            date: rawData[index]['date'],
+            date: date,
             hour: rawData[index]['hour'],
             minute: rawData[index]['minute'],
             category: rawData[index]['category'],
-            isFinished: rawData[index]['isFinished'],
+            isFinished: rawData[index]['isFinished'] == 0 ? false : true,
           );
         },
       );
     } catch (e) {
       print('Error getTodo');
+      print(e.toString());
       return null;
     }
   }
