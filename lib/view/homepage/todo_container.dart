@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:todo_app/blocs/todo_bloc/todo_bloc.dart';
 import 'package:todo_app/data/models/todo.dart';
 import 'package:todo_app/view/formpage/form_page.dart';
 import 'package:intl/intl.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class TodoContainer extends StatelessWidget {
   final Todo todo;
@@ -51,7 +53,11 @@ class TodoContainer extends StatelessWidget {
                       color: Color(0xFF309CFF),
                     ),
                   ),
-                  onPressed: () {},
+                  onPressed: () {
+                    context.read<TodoBloc>().add(TodoDelete(todo: todo));
+                    context.read<TodoBloc>().add(const TodoGet());
+                    Navigator.pop(context);
+                  },
                 ),
                 TextButton(
                   child: const Text(
