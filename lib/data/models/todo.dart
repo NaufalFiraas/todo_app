@@ -29,11 +29,11 @@ class Todo extends Equatable {
       'dateTitle': dateTitle,
       'title': title,
       'description': description,
-      'date': date,
+      'date': date.toIso8601String(),
       'hour': hour,
       'minute': minute,
       'category': category,
-      'isFinished': isFinished,
+      'isFinished': isFinished ? 1 : 0,
     };
   }
 

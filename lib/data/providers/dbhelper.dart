@@ -19,11 +19,11 @@ class DbHelper {
             dateTitle TEXT,
             title TEXT,
             description TEXT,
-            date DATETIME,
+            date TEXT,
             hour INTEGER,
             minute INTEGER,
             category TEXT,
-            isFinished BOOLEAN,
+            isFinished BOOLEAN
           )
         ''');
       },
