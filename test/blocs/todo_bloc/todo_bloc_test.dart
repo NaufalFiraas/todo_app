@@ -123,6 +123,17 @@ void main() {
     );
 
     blocTest<TodoBloc, TodoState>(
+      'Update checklist only case: ',
+      build: () => TodoBloc(todoRepo),
+      act: (bloc) {
+        when(() => todoRepo.updateTodo(todo))
+            .thenAnswer((_) => Future.value(true));
+        bloc.add(TodoUpdate(todo: todo, addChecklist: true));
+      },
+      expect: () => <TodoState>[],
+    );
+
+    blocTest<TodoBloc, TodoState>(
       'Update data failed case: ',
       build: () => TodoBloc(todoRepo),
       act: (bloc) {
