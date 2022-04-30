@@ -86,10 +86,10 @@ void main() {
       when(() => dbHelper.getData(null)).thenAnswer((_) => Future.value([
             {
               'id': 0,
-              'dateTitle': 'dateTitle test',
+              'dateTitle': '',
               'title': 'title test',
               'description': 'description test',
-              'date': date,
+              'date': date.add(const Duration(days: 1)),
               'hour': 17,
               'minute': 25,
               'category': 'category test',
@@ -102,10 +102,10 @@ void main() {
         equals([
           Todo(
             id: 0,
-            dateTitle: 'dateTitle test',
+            dateTitle: 'Besok',
             title: 'title test',
             description: 'description test',
-            date: date,
+            date: date.add(const Duration(days: 1)),
             hour: 17,
             minute: 25,
             category: 'category test',
@@ -119,10 +119,10 @@ void main() {
       when(() => dbHelper.getData(null)).thenAnswer((_) => Future.value([
             {
               'id': 0,
-              'dateTitle': 'dateTitle test',
+              'dateTitle': '',
               'title': 'title test',
               'description': 'description test',
-              'date': date,
+              'date': date.add(const Duration(days: 7)),
               'hour': 17,
               'minute': 25,
               'category': 'category test',
@@ -130,10 +130,21 @@ void main() {
             },
             {
               'id': 1,
-              'dateTitle': 'dateTitle1 test',
+              'dateTitle': '',
               'title': 'title1 test',
               'description': 'description1 test',
-              'date': date,
+              'date': date.add(const Duration(days: 4)),
+              'hour': 18,
+              'minute': 26,
+              'category': 'category1 test',
+              'isFinished': true,
+            },
+            {
+              'id': 1,
+              'dateTitle': '',
+              'title': 'title1 test',
+              'description': 'description1 test',
+              'date': date.add(const Duration(days: 30)),
               'hour': 18,
               'minute': 26,
               'category': 'category1 test',
@@ -146,10 +157,10 @@ void main() {
           equals([
             Todo(
               id: 0,
-              dateTitle: 'dateTitle test',
+              dateTitle: 'Minggu Depan',
               title: 'title test',
               description: 'description test',
-              date: date,
+              date: date.add(const Duration(days: 7)),
               hour: 17,
               minute: 25,
               category: 'category test',
@@ -157,15 +168,26 @@ void main() {
             ),
             Todo(
               id: 1,
-              dateTitle: 'dateTitle1 test',
+              dateTitle: 'Minggu Depan',
               title: 'title1 test',
               description: 'description1 test',
-              date: date,
+              date: date.add(const Duration(days: 4)),
+              hour: 18,
+              minute: 26,
+              category: 'category1 test',
+              isFinished: true,
+            ),Todo(
+              id: 1,
+              dateTitle: '2 Minggu / Lebih',
+              title: 'title1 test',
+              description: 'description1 test',
+              date: date.add(const Duration(days: 30)),
               hour: 18,
               minute: 26,
               category: 'category1 test',
               isFinished: true,
             ),
+
           ]));
     });
 

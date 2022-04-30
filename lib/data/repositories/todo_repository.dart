@@ -32,9 +32,38 @@ class TodoRepository {
       return List.generate(
         rawData.length,
         (index) {
+          String dateTitleValue;
+          DateTime date = rawData[index]['date'];
+          DateTime dateNow = DateTime.now();
+          DateTime sameDayNextWeek =
+              DateTime.now().add(const Duration(days: 7));
+          DateTime firstDateNextWeek = sameDayNextWeek.subtract(
+            Duration(days: sameDayNextWeek.weekday - 1),
+          );
+          DateTime lastDateNextWeek = sameDayNextWeek.add(
+            Duration(days: DateTime.daysPerWeek - sameDayNextWeek.weekday),
+          );
+
+          if (date.day == dateNow.day &&
+              date.month == dateNow.month &&
+              date.year == dateNow.year) {
+            dateTitleValue = 'Hari ini';
+          } else if (date.day == dateNow.add(const Duration(days: 1)).day &&
+              date.weekday == dateNow.add(const Duration(days: 1)).weekday) {
+            dateTitleValue = 'Besok';
+          } else if (date.day > dateNow.add(const Duration(days: 1)).day &&
+              date.day < firstDateNextWeek.day) {
+            dateTitleValue = 'Minggu Ini';
+          } else if (date.day >= firstDateNextWeek.day &&
+              date.day <= lastDateNextWeek.day) {
+            dateTitleValue = 'Minggu Depan';
+          } else {
+            dateTitleValue = '2 Minggu / Lebih';
+          }
+
           return Todo(
             id: rawData[index]['id'],
-            dateTitle: rawData[index]['dateTitle'],
+            dateTitle: dateTitleValue,
             title: rawData[index]['title'],
             description: rawData[index]['description'],
             date: rawData[index]['date'],
