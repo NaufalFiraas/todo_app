@@ -34,9 +34,13 @@ class TodoBloc extends Bloc<TodoEvent, TodoState> {
   }
 
   void _updateTodo(TodoUpdate event, Emitter<TodoState> emit) async {
-    emit(TodoLoading());
-    final bool updateTodo = await todoRepo.updateTodo(event.todo);
-    updateTodo ? emit(TodoCrudSuccess()) : emit(TodoCrudFailed());
+    if (event.addChecklist == null) {
+      emit(TodoLoading());
+      final bool updateTodo = await todoRepo.updateTodo(event.todo);
+      updateTodo ? emit(TodoCrudSuccess()) : emit(TodoCrudFailed());
+    } else {
+      final bool updateTodo = await todoRepo.updateTodo(event.todo);
+    }
   }
 
   void _deleteTodo(TodoDelete event, Emitter<TodoState> emit) async {

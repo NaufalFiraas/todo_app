@@ -27,8 +27,9 @@ class TodoAdd extends TodoEvent {
 //update todo (Todo)
 class TodoUpdate extends TodoEvent {
   final Todo todo;
+  final bool? addChecklist;
 
-  const TodoUpdate({required this.todo}) : super();
+  const TodoUpdate({required this.todo, this.addChecklist}) : super();
 
   @override
   List<Object?> get props => [todo];
