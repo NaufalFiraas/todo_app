@@ -44,13 +44,13 @@ class TodoRepository {
             Duration(days: DateTime.daysPerWeek - sameDayNextWeek.weekday),
           );
 
-          if (date.isBefore(dateNow)) {
+          if (date.isBefore(dateNow.subtract(const Duration(days: 1)))) {
             dateTitleValue = 'Kadaluwarsa';
           } else {
             if (date.day == dateNow.day &&
                 date.month == dateNow.month &&
                 date.year == dateNow.year) {
-              dateTitleValue = 'Hari ini';
+              dateTitleValue = 'Hari Ini';
             } else if (date.day == dateNow.add(const Duration(days: 1)).day &&
                 date.weekday == dateNow.add(const Duration(days: 1)).weekday) {
               dateTitleValue = 'Besok';

@@ -146,7 +146,8 @@ class HomePage extends StatelessWidget {
             Builder(builder: (context) {
               final TodoBloc todoBloc = context.watch<TodoBloc>();
 
-              if (todoBloc.state is TodoLoading) {
+              if (todoBloc.state is TodoLoading ||
+                  todoBloc.state is TodoCrudSuccess) {
                 return SliverToBoxAdapter(
                   child: SizedBox(
                     height: MediaQuery.of(context).size.height * 0.75,
