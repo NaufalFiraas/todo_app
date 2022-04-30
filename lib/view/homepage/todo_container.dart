@@ -14,7 +14,7 @@ class TodoContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Dismissible(
-      key: UniqueKey(),
+      key: ObjectKey(todo),
       direction: DismissDirection.endToStart,
       confirmDismiss: (_) {
         return showDialog(
@@ -148,7 +148,7 @@ class TodoContainer extends StatelessWidget {
                   context,
                   MaterialPageRoute(
                     builder: (context) {
-                      return const FormPage(isAdd: false);
+                      return FormPage(isAdd: false, todo: todo);
                     },
                   ),
                 );

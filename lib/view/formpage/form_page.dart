@@ -96,7 +96,9 @@ class _FormPageState extends State<FormPage> {
           },
         ),
         BlocProvider(
-            create: (context) => CategoryCubit()..changeCategory('Lainnya...')),
+            create: (context) => CategoryCubit()
+              ..changeCategory(
+                  widget.todo == null ? 'Lainnya...' : widget.todo!.category)),
       ],
       child: Scaffold(
         appBar: AppBar(
@@ -308,36 +310,7 @@ class _FormPageState extends State<FormPage> {
                                         ),
                               onPressed: () {
                                 if (formKey.currentState!.validate()) {
-                                  context.read<TodoBloc>().add(
-                                        TodoAdd(
-                                          todo: Todo(
-                                            id: 0,
-                                            dateTitle: '',
-                                            title: activityController.text,
-                                            description:
-                                                descriptionController.text,
-                                            date: context
-                                                .read<DateCubit>()
-                                                .state
-                                                .date,
-                                            hour: context
-                                                .read<TimeCubit>()
-                                                .state
-                                                .time
-                                                .hour,
-                                            minute: context
-                                                .read<TimeCubit>()
-                                                .state
-                                                .time
-                                                .minute,
-                                            category: context
-                                                .read<CategoryCubit>()
-                                                .state
-                                                .categoryValue,
-                                            isFinished: false,
-                                          ),
-                                        ),
-                                      );
+                                  btnFunction(context);
                                   context.read<TodoBloc>().add(const TodoGet());
                                   Navigator.pop(context);
                                 }
@@ -362,5 +335,38 @@ class _FormPageState extends State<FormPage> {
         ),
       ),
     );
+  }
+
+  void btnFunction(BuildContext context) {
+    widget.isAdd
+        ? context.read<TodoBloc>().add(
+              TodoAdd(
+                todo: Todo(
+                  dateTitle: '',
+                  title: activityController.text,
+                  description: descriptionController.text,
+                  date: context.read<DateCubit>().state.date,
+                  hour: context.read<TimeCubit>().state.time.hour,
+                  minute: context.read<TimeCubit>().state.time.minute,
+                  category: context.read<CategoryCubit>().state.categoryValue,
+                  isFinished: false,
+                ),
+              ),
+            )
+        : context.read<TodoBloc>().add(
+              TodoUpdate(
+                todo: Todo(
+                  id: widget.todo?.id,
+                  dateTitle: '',
+                  title: activityController.text,
+                  description: descriptionController.text,
+                  date: context.read<DateCubit>().state.date,
+                  hour: context.read<TimeCubit>().state.time.hour,
+                  minute: context.read<TimeCubit>().state.time.minute,
+                  category: context.read<CategoryCubit>().state.categoryValue,
+                  isFinished: widget.todo!.isFinished,
+                ),
+              ),
+            );
   }
 }
