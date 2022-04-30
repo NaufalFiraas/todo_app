@@ -338,6 +338,7 @@ class _FormPageState extends State<FormPage> {
                                           ),
                                         ),
                                       );
+                                  context.read<TodoBloc>().add(const TodoGet());
                                   Navigator.pop(context);
                                 }
                               },

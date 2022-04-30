@@ -44,21 +44,25 @@ class TodoRepository {
             Duration(days: DateTime.daysPerWeek - sameDayNextWeek.weekday),
           );
 
-          if (date.day == dateNow.day &&
-              date.month == dateNow.month &&
-              date.year == dateNow.year) {
-            dateTitleValue = 'Hari ini';
-          } else if (date.day == dateNow.add(const Duration(days: 1)).day &&
-              date.weekday == dateNow.add(const Duration(days: 1)).weekday) {
-            dateTitleValue = 'Besok';
-          } else if (date.day > dateNow.add(const Duration(days: 1)).day &&
-              date.day < firstDateNextWeek.day) {
-            dateTitleValue = 'Minggu Ini';
-          } else if (date.day >= firstDateNextWeek.day &&
-              date.day <= lastDateNextWeek.day) {
-            dateTitleValue = 'Minggu Depan';
+          if (date.isBefore(dateNow.subtract(const Duration(days: 1)))) {
+            dateTitleValue = 'Kadaluwarsa';
           } else {
-            dateTitleValue = '2 Minggu / Lebih';
+            if (date.day == dateNow.day &&
+                date.month == dateNow.month &&
+                date.year == dateNow.year) {
+              dateTitleValue = 'Hari Ini';
+            } else if (date.day == dateNow.add(const Duration(days: 1)).day &&
+                date.weekday == dateNow.add(const Duration(days: 1)).weekday) {
+              dateTitleValue = 'Besok';
+            } else if (date.day > dateNow.add(const Duration(days: 1)).day &&
+                date.day < firstDateNextWeek.day) {
+              dateTitleValue = 'Minggu Ini';
+            } else if (date.day >= firstDateNextWeek.day &&
+                date.day <= lastDateNextWeek.day) {
+              dateTitleValue = 'Minggu Depan';
+            } else {
+              dateTitleValue = '2 Minggu / Lebih';
+            }
           }
 
           return Todo(
