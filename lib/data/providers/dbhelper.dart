@@ -54,9 +54,9 @@ class DbHelper {
   Future<List<Map<String, dynamic>>> getData(String? category) async {
     final Database db = await dbInstance;
 
-    final String query = category == null
+    final String query = category == null || category == 'Semua'
         ? 'SELECT * FROM todo_table ORDER BY date ASC'
-        : 'SELECT * FROM todo_table WHERE category = $category ORDER BY date ASC';
+        : "SELECT * FROM todo_table WHERE category = '$category' ORDER BY date ASC";
 
     return await db.rawQuery(query);
   }

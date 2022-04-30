@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:todo_app/blocs/category_cubit/category_cubit.dart';
+import 'package:todo_app/blocs/todo_bloc/todo_bloc.dart';
 import 'package:todo_app/view/drawer/my_drawer.dart';
 import 'package:todo_app/view/formpage/form_page.dart';
 import 'package:todo_app/view/homepage/todo_container.dart';
@@ -120,12 +121,14 @@ class HomePage extends StatelessWidget {
                           builder: (context) {
                             final CategoryCubit categoryCubit =
                                 context.watch<CategoryCubit>();
+                            final TodoBloc todoBloc = context.read<TodoBloc>();
 
                             return DropdownButton<String>(
                               items: dropdownMenuBuilder(dropdownMenus),
                               onChanged: (value) {
                                 if (value != null) {
                                   categoryCubit.changeCategory(value);
+                                  todoBloc.add(TodoGet(category: value));
                                 }
                               },
                               value: categoryCubit.state.categoryValue,
@@ -140,22 +143,75 @@ class HomePage extends StatelessWidget {
                 ),
               ),
             ),
-            SliverList(
-              delegate: SliverChildBuilderDelegate(
-                (context, index) {
-                  return const TodoContainer(
-                    dayTitle: 'Hari Ini',
-                    title: 'Judul',
-                    description: 'Deskripsi',
-                    date: '25-04-2022',
-                    hour: 17,
-                    minute: 0,
-                    category: 'Semua',
+            Builder(builder: (context) {
+              final TodoBloc todoBloc = context.watch<TodoBloc>();
+
+              if (todoBloc.state is TodoLoading) {
+                return SliverToBoxAdapter(
+                  child: SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.75,
+                    child: const Center(
+                      child: SizedBox(
+                        height: 30,
+                        width: 30,
+                        child: CircularProgressIndicator(
+                          color: Colors.lightBlue,
+                        ),
+                      ),
+                    ),
+                  ),
+                );
+              } else if (todoBloc.state is TodoCrudFailed) {
+                return SliverToBoxAdapter(
+                  child: SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.75,
+                    child: const Center(
+                      child: Text(
+                        'Terjadi Kesalahan!',
+                        style: TextStyle(
+                          fontSize: 30,
+                          fontFamily: 'Patrick Hand',
+                          color: Colors.black54,
+                        ),
+                      ),
+                    ),
+                  ),
+                );
+              } else {
+                final TodoLoaded todoLoaded = todoBloc.state as TodoLoaded;
+
+                if (todoLoaded.todos.isEmpty) {
+                  return SliverToBoxAdapter(
+                    child: SizedBox(
+                      height: MediaQuery.of(context).size.height * 0.75,
+                      child: const Center(
+                        child: Text(
+                          'Tidak Ada Data!',
+                          style: TextStyle(
+                            fontSize: 25,
+                            fontFamily: 'Patrick Hand',
+                            color: Colors.black54,
+                          ),
+                        ),
+                      ),
+                    ),
                   );
-                },
-                childCount: 10,
-              ),
-            ),
+                } else {
+                  print(todoLoaded.todos);
+
+                  return SliverList(
+                    delegate: SliverChildBuilderDelegate(
+                      (context, index) {
+                        return TodoContainer(
+                          todo: todoLoaded.todos[index],
+                        );
+                      },
+                      childCount: todoLoaded.todos.length,
+                    ),
+                  );
+                }
+              }
+            }),
           ],
         ),
       ),

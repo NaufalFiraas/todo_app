@@ -1,24 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:todo_app/data/models/todo.dart';
 import 'package:todo_app/view/formpage/form_page.dart';
+import 'package:intl/intl.dart';
 
 class TodoContainer extends StatelessWidget {
-  final String dayTitle;
-  final String title;
-  final String description;
-  final String category;
-  final String date;
-  final int hour;
-  final int minute;
+  final Todo todo;
 
   const TodoContainer({
     Key? key,
-    required this.dayTitle,
-    required this.title,
-    required this.description,
-    required this.date,
-    required this.hour,
-    required this.minute,
-    required this.category,
+    required this.todo,
   }) : super(key: key);
 
   @override
@@ -103,22 +93,47 @@ class TodoContainer extends StatelessWidget {
             Container(
               padding: const EdgeInsets.fromLTRB(15, 2, 15, 2),
               width: double.infinity,
-              decoration: const BoxDecoration(
+              decoration: BoxDecoration(
                 gradient: LinearGradient(
-                  colors: [
-                    Color(0xFF309CFF),
-                    Color(0xFF044D90),
-                  ],
+                  colors: todo.dateTitle == 'Hari Ini'
+                      ? [
+                          const Color(0xFF309CFF),
+                          const Color(0xFF044D90),
+                        ]
+                      : todo.dateTitle == 'Besok'
+                          ? [
+                              const Color(0xFFE2E719),
+                              const Color(0xFF044D90),
+                            ]
+                          : todo.dateTitle == 'Minggu Ini'
+                              ? [
+                                  const Color(0xFF15F22B),
+                                  const Color(0xFF044D90),
+                                ]
+                              : todo.dateTitle == 'Minggu Depan'
+                                  ? [
+                                      const Color(0xFF156009),
+                                      const Color(0xFF044D90),
+                                    ]
+                                  : todo.dateTitle == '2 Minggu / Lebih'
+                                      ? [
+                                          const Color(0xFF273DFF),
+                                          const Color(0xFF044D90),
+                                        ]
+                                      : [
+                                          const Color(0xFF4B4B4B),
+                                          const Color(0xFF044D90),
+                                        ],
                   begin: Alignment.centerLeft,
                   end: Alignment.centerRight,
                 ),
-                borderRadius: BorderRadius.only(
+                borderRadius: const BorderRadius.only(
                   topLeft: Radius.circular(15),
                   topRight: Radius.circular(15),
                 ),
               ),
               child: Text(
-                dayTitle,
+                todo.dateTitle,
                 style: const TextStyle(
                   fontFamily: 'Patrick Hand',
                   fontSize: 18,
@@ -145,7 +160,7 @@ class TodoContainer extends StatelessWidget {
                 onChanged: (value) {},
               ),
               title: Text(
-                title,
+                todo.title,
                 style: const TextStyle(
                   fontFamily: 'Patrick Hand',
                   fontSize: 18,
@@ -160,7 +175,7 @@ class TodoContainer extends StatelessWidget {
                     height: 3,
                   ),
                   Text(
-                    description,
+                    todo.description,
                     style: const TextStyle(
                       fontFamily: 'Patrick Hand',
                       fontSize: 14,
@@ -172,7 +187,7 @@ class TodoContainer extends StatelessWidget {
                     height: 3,
                   ),
                   Text(
-                    date,
+                    DateFormat('dd-MMM-yyyy').format(todo.date),
                     style: const TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.w400,
@@ -183,9 +198,9 @@ class TodoContainer extends StatelessWidget {
                     height: 3,
                   ),
                   Text(
-                    hour.toString().padLeft(2, '0') +
+                    todo.hour.toString().padLeft(2, '0') +
                         ' : ' +
-                        minute.toString().padLeft(2, '0'),
+                        todo.minute.toString().padLeft(2, '0'),
                     style: const TextStyle(
                       fontFamily: 'Patrick Hand',
                       fontSize: 14,
@@ -197,7 +212,7 @@ class TodoContainer extends StatelessWidget {
                     height: 3,
                   ),
                   Text(
-                    category,
+                    todo.category,
                     style: const TextStyle(
                       fontFamily: 'Patrick Hand',
                       fontSize: 14,
