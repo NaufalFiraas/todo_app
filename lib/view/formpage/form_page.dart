@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:todo_app/blocs/category_cubit/category_cubit.dart';
+import 'package:todo_app/blocs/darktheme_cubit/darktheme_cubit.dart';
 import 'package:todo_app/blocs/date_cubit/date_cubit.dart';
 import 'package:todo_app/blocs/time_cubit/time_cubit.dart';
 import 'package:todo_app/blocs/todo_bloc/todo_bloc.dart';
@@ -49,17 +50,18 @@ class _FormPageState extends State<FormPage> {
     'Lainnya...',
   ];
 
-  List<DropdownMenuItem<String>> dropdownMenuBuilder(List<String> menus) {
+  List<DropdownMenuItem<String>> dropdownMenuBuilder(
+      List<String> menus, bool isDarktheme) {
     return menus.map(
       (e) {
         return DropdownMenuItem<String>(
           value: e,
           child: Text(
             e,
-            style: const TextStyle(
+            style: TextStyle(
               fontFamily: 'Patrick Hand',
               fontSize: 16,
-              color: Colors.black54,
+              color: isDarktheme ? Colors.white : Colors.black54,
             ),
           ),
         );
@@ -70,6 +72,8 @@ class _FormPageState extends State<FormPage> {
   @override
   Widget build(BuildContext context) {
     print('build form');
+    final DarkthemeChanged darkthemeState =
+        context.watch<DarkthemeCubit>().state as DarkthemeChanged;
 
     return MultiBlocProvider(
       providers: [
@@ -147,6 +151,7 @@ class _FormPageState extends State<FormPage> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       ActivityDescriptionForm(
+                        isDark: darkthemeState.isDark,
                         controller: activityController,
                         title: 'Aktivitas:',
                         validation: (value) {
@@ -160,6 +165,7 @@ class _FormPageState extends State<FormPage> {
                         height: 20,
                       ),
                       ActivityDescriptionForm(
+                        isDark: darkthemeState.isDark,
                         controller: descriptionController,
                         title: 'Deskripsi:',
                       ),
@@ -184,10 +190,12 @@ class _FormPageState extends State<FormPage> {
                           child: Text(
                             DateFormat('dd/MMM/yyyy')
                                 .format(dateCubit.state.date),
-                            style: const TextStyle(
+                            style: TextStyle(
                               fontSize: 16,
                               fontFamily: 'Patrick Hand',
-                              color: Colors.black54,
+                              color: darkthemeState.isDark
+                                  ? Colors.white
+                                  : Colors.black54,
                             ),
                           ),
                           onTap: () {
@@ -227,10 +235,12 @@ class _FormPageState extends State<FormPage> {
                                 timeCubit.state.time.minute
                                     .toString()
                                     .padLeft(2, '0'),
-                            style: const TextStyle(
+                            style: TextStyle(
                               fontFamily: 'Patrick Hand',
                               fontSize: 16,
-                              color: Colors.black54,
+                              color: darkthemeState.isDark
+                                  ? Colors.white
+                                  : Colors.black54,
                             ),
                           ),
                           onTap: () {
@@ -258,7 +268,11 @@ class _FormPageState extends State<FormPage> {
                               context.watch<CategoryCubit>();
 
                           return DropdownButton<String>(
-                            items: dropdownMenuBuilder(dropdownMenus),
+                            dropdownColor: darkthemeState.isDark
+                                ? const Color(0xFF309CFF)
+                                : Colors.white,
+                            items: dropdownMenuBuilder(
+                                dropdownMenus, darkthemeState.isDark),
                             onChanged: (value) {
                               if (value != null) {
                                 categoryCubit.changeCategory(value);

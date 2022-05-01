@@ -1,12 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hydrated_bloc/hydrated_bloc.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:todo_app/blocs/darktheme_cubit/darktheme_cubit.dart';
 import 'package:todo_app/blocs/todo_bloc/todo_bloc.dart';
 import 'package:todo_app/data/providers/dbhelper.dart';
 import 'package:todo_app/data/repositories/todo_repository.dart';
 import 'package:todo_app/view/homepage/home_page.dart';
 
-void main() {
-  runApp(const MyApp());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  final HydratedStorage storage = await HydratedStorage.build(
+    storageDirectory: await getApplicationDocumentsDirectory(),
+  );
+  HydratedBlocOverrides.runZoned(
+    () => runApp(const MyApp()),
+    storage: storage,
+  );
 }
 
 class MyApp extends StatefulWidget {
@@ -34,11 +44,19 @@ class _MyAppState extends State<MyApp> {
         BlocProvider<TodoBloc>(
           create: (context) => TodoBloc(todoRepo)..add(const TodoGet()),
         ),
+        BlocProvider<DarkthemeCubit>(create: (context) => DarkthemeCubit()),
       ],
-      child: MaterialApp(
-        debugShowCheckedModeBanner: false,
-        home: HomePage(),
-      ),
+      child: Builder(builder: (context) {
+        return MaterialApp(
+          debugShowCheckedModeBanner: false,
+          home: HomePage(),
+          theme: ThemeData(
+            brightness: context.watch<DarkthemeCubit>().state.isDark
+                ? Brightness.dark
+                : Brightness.light,
+          ),
+        );
+      }),
     );
   }
 }

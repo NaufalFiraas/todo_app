@@ -6,6 +6,8 @@ import 'package:todo_app/view/formpage/form_page.dart';
 import 'package:todo_app/view/homepage/todo_container.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../blocs/darktheme_cubit/darktheme_cubit.dart';
+
 class HomePage extends StatelessWidget {
   HomePage({Key? key}) : super(key: key);
 
@@ -145,6 +147,8 @@ class HomePage extends StatelessWidget {
             ),
             Builder(builder: (context) {
               final TodoBloc todoBloc = context.watch<TodoBloc>();
+              final DarkthemeChanged darkthemeCubit =
+                  context.watch<DarkthemeCubit>().state as DarkthemeChanged;
 
               if (todoBloc.state is TodoLoading ||
                   todoBloc.state is TodoCrudSuccess) {
@@ -166,13 +170,15 @@ class HomePage extends StatelessWidget {
                 return SliverToBoxAdapter(
                   child: SizedBox(
                     height: MediaQuery.of(context).size.height * 0.75,
-                    child: const Center(
+                    child: Center(
                       child: Text(
                         'Terjadi Kesalahan!',
                         style: TextStyle(
                           fontSize: 30,
                           fontFamily: 'Patrick Hand',
-                          color: Colors.black54,
+                          color: darkthemeCubit.isDark
+                              ? Colors.white
+                              : Colors.black54,
                         ),
                       ),
                     ),
@@ -185,13 +191,15 @@ class HomePage extends StatelessWidget {
                   return SliverToBoxAdapter(
                     child: SizedBox(
                       height: MediaQuery.of(context).size.height * 0.75,
-                      child: const Center(
+                      child: Center(
                         child: Text(
                           'Tidak Ada Data!',
                           style: TextStyle(
                             fontSize: 25,
                             fontFamily: 'Patrick Hand',
-                            color: Colors.black54,
+                            color: darkthemeCubit.isDark
+                                ? Colors.white
+                                : Colors.black54,
                           ),
                         ),
                       ),
@@ -204,6 +212,7 @@ class HomePage extends StatelessWidget {
                     delegate: SliverChildBuilderDelegate(
                       (context, index) {
                         return TodoContainer(
+                          isDark: darkthemeCubit.isDark,
                           todo: todoLoaded.todos[index],
                         );
                       },
