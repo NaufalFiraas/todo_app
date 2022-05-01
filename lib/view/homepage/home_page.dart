@@ -5,6 +5,7 @@ import 'package:todo_app/view/drawer/my_drawer.dart';
 import 'package:todo_app/view/formpage/form_page.dart';
 import 'package:todo_app/view/homepage/todo_container.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
 
 import '../../blocs/darktheme_cubit/darktheme_cubit.dart';
 
@@ -21,6 +22,16 @@ class HomePage extends StatelessWidget {
     'Kuliner',
     'Lainnya...',
     'Semua',
+  ];
+
+  final List<String> days = [
+    'Senin',
+    'Selasa',
+    'Rabu',
+    'Kamis',
+    "Jum'at",
+    'Sabtu',
+    'Minggu',
   ];
 
   List<DropdownMenuItem<String>> dropdownMenuBuilder(List<String> menus) {
@@ -44,6 +55,8 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final DateTime dateNow = DateTime.now();
+
     print('build home');
     return Scaffold(
       endDrawer: const MyDrawer(),
@@ -98,18 +111,18 @@ class HomePage extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Text(
-                          'Senin',
-                          style: TextStyle(
+                        Text(
+                          days[dateNow.weekday - 1],
+                          style: const TextStyle(
                             fontFamily: 'Patrick Hand',
                             fontSize: 25,
                             fontWeight: FontWeight.w400,
                             color: Colors.white,
                           ),
                         ),
-                        const Text(
-                          '25-04-2022',
-                          style: TextStyle(
+                        Text(
+                          DateFormat('dd-MMM-yyyy').format(dateNow),
+                          style: const TextStyle(
                             fontFamily: 'Patrick Hand',
                             fontSize: 18,
                             fontWeight: FontWeight.w400,
