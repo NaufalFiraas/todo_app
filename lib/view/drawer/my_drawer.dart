@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:todo_app/blocs/darktheme_cubit/darktheme_cubit.dart';
 import 'package:todo_app/view/aboutpage/about_page.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class MyDrawer extends StatelessWidget {
   const MyDrawer({Key? key}) : super(key: key);
@@ -43,17 +45,21 @@ class MyDrawer extends StatelessWidget {
                   thickness: 3,
                 ),
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Icon(Icons.flare),
-                  Switch(
-                    value: false,
-                    onChanged: (value) {},
-                  ),
-                  const Icon(Icons.nightlight_round),
-                ],
-              ),
+              Builder(builder: (context) {
+                return Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Icon(Icons.flare),
+                    Switch(
+                      value: context.watch<DarkthemeCubit>().state.isDark,
+                      onChanged: (value) {
+                        context.read<DarkthemeCubit>().changeToDark(value);
+                      },
+                    ),
+                    const Icon(Icons.nightlight_round),
+                  ],
+                );
+              }),
             ],
           ),
         ),

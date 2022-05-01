@@ -8,9 +8,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 class TodoContainer extends StatelessWidget {
   final Todo todo;
+  final bool isDark;
 
   const TodoContainer({
     Key? key,
+    required this.isDark,
     required this.todo,
   }) : super(key: key);
 
@@ -36,13 +38,13 @@ class TodoContainer extends StatelessWidget {
                     color: Color(0xFF309CFF),
                   ),
                 ),
-                content: const Text(
+                content: Text(
                   'Yakin Hapus?',
                   style: TextStyle(
                     fontFamily: 'Patrick Hand',
                     fontSize: 20,
                     fontWeight: FontWeight.w600,
-                    color: Colors.black54,
+                    color: isDark ? Colors.white : Colors.black54,
                   ),
                 ),
                 actions: [
@@ -53,7 +55,7 @@ class TodoContainer extends StatelessWidget {
                         fontFamily: 'Patrick Hand',
                         fontSize: 18,
                         fontWeight: FontWeight.w500,
-                        color: Color(0xFF309CFF),
+                        color: Color(0xFFB2D7FF),
                       ),
                     ),
                     onPressed: () {
@@ -85,7 +87,7 @@ class TodoContainer extends StatelessWidget {
           width: double.infinity,
           margin: const EdgeInsets.all(20),
           decoration: BoxDecoration(
-            color: Colors.white,
+            color: isDark ? const Color(0xFFDEE8F5) : Colors.white,
             borderRadius: BorderRadius.circular(15),
             boxShadow: const [
               BoxShadow(

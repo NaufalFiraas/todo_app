@@ -4,9 +4,11 @@ class ActivityDescriptionForm extends StatelessWidget {
   final TextEditingController controller;
   final String title;
   final String? Function(String?)? validation;
+  final bool isDark;
 
   const ActivityDescriptionForm({
     Key? key,
+    required this.isDark,
     required this.controller,
     required this.title,
     this.validation,
@@ -25,10 +27,10 @@ class ActivityDescriptionForm extends StatelessWidget {
         errorStyle: const TextStyle(
             fontSize: 18, color: Colors.red, fontFamily: 'Patrick Hand'),
       ),
-      style: const TextStyle(
+      style: TextStyle(
         fontSize: 16,
         fontFamily: 'Patrick Hand',
-        color: Colors.black54,
+        color: isDark ? Colors.white : Colors.black54,
       ),
       controller: controller,
       validator: validation,
