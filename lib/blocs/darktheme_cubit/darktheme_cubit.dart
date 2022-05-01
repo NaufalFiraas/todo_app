@@ -20,6 +20,6 @@ class DarkthemeCubit extends HydratedCubit<DarkthemeState> {
 
   @override
   Map<String, dynamic>? toJson(DarkthemeState state) {
-    state.toMap();
+    return state.toMap();
   }
 }
