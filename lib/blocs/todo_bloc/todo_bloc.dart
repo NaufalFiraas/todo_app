@@ -37,7 +37,7 @@ class TodoBloc extends Bloc<TodoEvent, TodoState> {
       final bool updateTodo = await todoRepo.updateTodo(event.todo);
       updateTodo ? emit(TodoCrudSuccess()) : emit(TodoCrudFailed());
     } else {
-      final bool updateTodo = await todoRepo.updateTodo(event.todo);
+      await todoRepo.updateTodo(event.todo);
     }
   }
 
