@@ -55,7 +55,7 @@ class TodoContainer extends StatelessWidget {
                         fontFamily: 'Patrick Hand',
                         fontSize: 18,
                         fontWeight: FontWeight.w500,
-                        color: Color(0xFFB2D7FF),
+                        color: Color(0xFF309CFF),
                       ),
                     ),
                     onPressed: () {

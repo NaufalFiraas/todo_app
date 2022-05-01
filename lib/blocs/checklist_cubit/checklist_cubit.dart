@@ -1,6 +1,5 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:todo_app/data/models/todo.dart';
 
 part 'checklist_state.dart';
 

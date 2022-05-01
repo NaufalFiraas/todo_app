@@ -58,7 +58,6 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     final DateTime dateNow = DateTime.now();
 
-    print('build home');
     return Scaffold(
       endDrawer: const MyDrawer(),
       floatingActionButton: FloatingActionButton(
@@ -229,8 +228,6 @@ class HomePage extends StatelessWidget {
                     ),
                   );
                 } else {
-                  print(todoLoaded.todos);
-
                   return SliverList(
                     delegate: SliverChildBuilderDelegate(
                       (context, index) {

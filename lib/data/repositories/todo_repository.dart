@@ -12,6 +12,7 @@ class TodoRepository {
       return true;
     } catch (e) {
       print('Error insertTodo');
+      print(e.toString());
       return false;
     }
   }
@@ -22,6 +23,7 @@ class TodoRepository {
       return true;
     } catch (e) {
       print('Error updateTodo');
+      print(e.toString());
       return false;
     }
   }
@@ -91,6 +93,7 @@ class TodoRepository {
       return true;
     } catch (e) {
       print('Error deleteTodo');
+      print(e.toString());
       return false;
     }
   }

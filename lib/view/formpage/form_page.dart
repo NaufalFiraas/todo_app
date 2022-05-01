@@ -71,7 +71,6 @@ class _FormPageState extends State<FormPage> {
 
   @override
   Widget build(BuildContext context) {
-    print('build form');
     final DarkthemeChanged darkthemeState =
         context.watch<DarkthemeCubit>().state as DarkthemeChanged;
 
