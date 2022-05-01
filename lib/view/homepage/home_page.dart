@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
 import 'package:todo_app/blocs/category_cubit/category_cubit.dart';
 import 'package:todo_app/blocs/todo_bloc/todo_bloc.dart';
 import 'package:todo_app/view/drawer/my_drawer.dart';
@@ -203,17 +204,26 @@ class HomePage extends StatelessWidget {
                 if (todoLoaded.todos.isEmpty) {
                   return SliverToBoxAdapter(
                     child: SizedBox(
-                      height: MediaQuery.of(context).size.height * 0.75,
+                      height: MediaQuery.of(context).size.height * 0.7,
                       child: Center(
-                        child: Text(
-                          'Tidak Ada Data!',
-                          style: TextStyle(
-                            fontSize: 25,
-                            fontFamily: 'Patrick Hand',
-                            color: darkthemeCubit.isDark
-                                ? Colors.white
-                                : Colors.black54,
-                          ),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Lottie.asset(
+                              'assets/lotties/empty.json',
+                              height: 270,
+                            ),
+                            Text(
+                              'Tidak Ada Data!',
+                              style: TextStyle(
+                                fontSize: 25,
+                                fontFamily: 'Patrick Hand',
+                                color: darkthemeCubit.isDark
+                                    ? Colors.white
+                                    : Colors.black54,
+                              ),
+                            ),
+                          ],
                         ),
                       ),
                     ),
