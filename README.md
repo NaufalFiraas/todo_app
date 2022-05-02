@@ -6,3 +6,8 @@ tech stack:
  - Flutter
  - SQLite
  - BLoC Pattern
+
+tools:
+ - Android Studio 2021.1.1
+ - Figma
+ - Git & Github
