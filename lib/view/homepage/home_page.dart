@@ -232,6 +232,8 @@ class HomePage extends StatelessWidget {
                     delegate: SliverChildBuilderDelegate(
                       (context, index) {
                         return TodoContainer(
+                          index: index,
+                          length: todoLoaded.todos.length,
                           isDark: darkthemeCubit.isDark,
                           todo: todoLoaded.todos[index],
                         );
