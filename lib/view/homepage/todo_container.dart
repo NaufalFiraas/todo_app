@@ -7,11 +7,15 @@ import 'package:intl/intl.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class TodoContainer extends StatelessWidget {
+  final int index;
+  final int length;
   final Todo todo;
   final bool isDark;
 
   const TodoContainer({
     Key? key,
+    required this.index,
+    required this.length,
     required this.isDark,
     required this.todo,
   }) : super(key: key);
@@ -85,7 +89,12 @@ class TodoContainer extends StatelessWidget {
         },
         child: Container(
           width: double.infinity,
-          margin: const EdgeInsets.all(20),
+          margin: EdgeInsets.fromLTRB(
+            20,
+            index == 0 ? 20 : 10,
+            20,
+            index == length - 1 ? 20 : 10,
+          ),
           decoration: BoxDecoration(
             color: isDark ? const Color(0xFFDEE8F5) : Colors.white,
             borderRadius: BorderRadius.circular(15),
