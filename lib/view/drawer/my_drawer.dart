@@ -14,9 +14,12 @@ class MyDrawer extends StatelessWidget {
           width: MediaQuery.of(context).size.width * 0.7,
           child: Column(
             children: [
-              Image.asset('assets/images/logo.png'),
               const SizedBox(
-                height: 30,
+                height: 50,
+              ),
+              Image.asset('assets/images/todoapp.png', height: 60,),
+              const SizedBox(
+                height: 10,
               ),
               TextButton(
                 child: const Text(

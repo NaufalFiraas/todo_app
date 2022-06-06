@@ -12,21 +12,15 @@ class AboutPage extends StatelessWidget {
         child: SingleChildScrollView(
           child: Column(
             children: [
-              Image.asset(
-                'assets/images/logo.png',
-                width: 330,
-                height: 250,
-              ),
               const SizedBox(
-                height: 20,
+                height: 50,
               ),
               Image.asset(
                 'assets/images/todoapp.png',
-                width: 105,
-                height: 47,
+                height: 60,
               ),
               const SizedBox(
-                height: 8,
+                height: 20,
               ),
               Builder(builder: (context) {
                 final DarkthemeChanged darkthemeState =

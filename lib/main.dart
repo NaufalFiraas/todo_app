@@ -24,7 +24,7 @@ void main() async {
 }
 
 Future<void> splashInit() async {
-  await Future.delayed(const Duration(seconds: 3));
+  await Future.delayed(const Duration(seconds: 2));
 }
 
 class MyApp extends StatefulWidget {
