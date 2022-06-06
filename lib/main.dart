@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:todo_app/blocs/darktheme_cubit/darktheme_cubit.dart';
@@ -8,8 +9,10 @@ import 'package:todo_app/data/providers/dbhelper.dart';
 import 'package:todo_app/data/repositories/todo_repository.dart';
 import 'package:todo_app/view/homepage/home_page.dart';
 
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await splashInit();
   final HydratedStorage storage = await HydratedStorage.build(
     storageDirectory: await getApplicationDocumentsDirectory(),
   );
@@ -17,6 +20,11 @@ void main() async {
     () => runApp(const MyApp()),
     storage: storage,
   );
+  FlutterNativeSplash.remove();
+}
+
+Future<void> splashInit() async {
+  await Future.delayed(const Duration(seconds: 3));
 }
 
 class MyApp extends StatefulWidget {
