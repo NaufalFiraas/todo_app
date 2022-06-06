@@ -19,14 +19,15 @@ class MyDrawer extends StatelessWidget {
               ),
               Image.asset('assets/images/todoapp.png', height: 60,),
               const SizedBox(
-                height: 10,
+                height: 20,
               ),
               TextButton(
                 child: const Text(
                   'Tentang Aplikasi',
                   style: TextStyle(
-                    fontSize: 18,
+                    fontSize: 20,
                     fontFamily: 'Patrick Hand',
+                    fontWeight: FontWeight.w600,
                     color: Color(0xFF309CFF),
                   ),
                 ),
