@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:todo_app/extension/extensions.dart';
 
 class Todo extends Equatable {
   final int? id;
@@ -29,7 +30,7 @@ class Todo extends Equatable {
       'dateTitle': dateTitle,
       'title': title,
       'description': description,
-      'date': date.toIso8601String(),
+      'date': date.withTime(hour, minute).toIso8601String(),
       'hour': hour,
       'minute': minute,
       'category': category,
