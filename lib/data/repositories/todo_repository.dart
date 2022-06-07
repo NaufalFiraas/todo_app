@@ -46,10 +46,7 @@ class TodoRepository {
             Duration(days: DateTime.daysPerWeek - sameDayNextWeek.weekday),
           );
 
-          if (rawData[index]['hour'] == dateNow.hour &&
-              rawData[index]['minute'] < dateNow.minute) {
-            dateTitleValue = 'Kadaluwarsa';
-          } else if (rawData[index]['hour'] < dateNow.hour) {
+          if (date.isBefore(dateNow.subtract(const Duration(minutes: 1)))) {
             dateTitleValue = 'Kadaluwarsa';
           } else {
             if (date.day == dateNow.day &&
