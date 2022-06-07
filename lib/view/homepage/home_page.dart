@@ -208,9 +208,9 @@ class HomePage extends StatelessWidget {
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Lottie.asset(
-                              'assets/lotties/empty.json',
-                              height: 270,
+                            Image.asset(
+                              'assets/images/nodata.png',
+                              width: MediaQuery.of(context).size.height * 0.32,
                             ),
                             Text(
                               'Tidak Ada Data!',
