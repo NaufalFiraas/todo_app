@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:lottie/lottie.dart';
 import 'package:todo_app/blocs/category_cubit/category_cubit.dart';
 import 'package:todo_app/blocs/todo_bloc/todo_bloc.dart';
 import 'package:todo_app/view/drawer/my_drawer.dart';
@@ -208,9 +207,9 @@ class HomePage extends StatelessWidget {
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Lottie.asset(
-                              'assets/lotties/empty.json',
-                              height: 270,
+                            Image.asset(
+                              'assets/images/nodata.png',
+                              width: MediaQuery.of(context).size.height * 0.32,
                             ),
                             Text(
                               'Tidak Ada Data!',
