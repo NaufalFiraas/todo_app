@@ -39,6 +39,7 @@ class _TodoContainerState extends State<TodoContainer> {
         widget.todo.title,
         '',
         widget.todo.date,
+        0,
       ));
     }
   }
@@ -216,6 +217,7 @@ class _TodoContainerState extends State<TodoContainer> {
                           widget.todo.title,
                           '',
                           widget.todo.date,
+                          0
                         ));
                       }
                       addNewChecklistedTodo(

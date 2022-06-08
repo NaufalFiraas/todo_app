@@ -5,9 +5,10 @@ class TodoReminder extends Equatable {
   final String title;
   final String body;
   final DateTime time;
+  final int delay;
 
-  const TodoReminder(this.id, this.title, this.body, this.time);
+  const TodoReminder(this.id, this.title, this.body, this.time, this.delay);
 
   @override
-  List<Object?> get props => [id, title, body, time];
+  List<Object?> get props => [id, title, body, time, delay];
 }
