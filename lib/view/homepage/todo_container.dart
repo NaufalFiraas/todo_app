@@ -5,8 +5,10 @@ import 'package:todo_app/data/models/todo.dart';
 import 'package:todo_app/view/formpage/form_page.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../blocs/reminder_cubit/reminder_cubit.dart';
+import '../../data/models/todo_reminder.dart';
 
-class TodoContainer extends StatelessWidget {
+class TodoContainer extends StatefulWidget {
   final int index;
   final int length;
   final Todo todo;
@@ -21,11 +23,33 @@ class TodoContainer extends StatelessWidget {
   }) : super(key: key);
 
   @override
+  State<TodoContainer> createState() => _TodoContainerState();
+}
+
+class _TodoContainerState extends State<TodoContainer> {
+  late final ReminderCubit reminderCubit;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    reminderCubit = context.read<ReminderCubit>();
+    if (!widget.todo.isFinished && widget.todo.date.isAfter(DateTime.now())) {
+      reminderCubit.setReminder(TodoReminder(
+        widget.todo.id!,
+        widget.todo.title,
+        '',
+        widget.todo.date,
+      ));
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => ChecklistCubit()..checklistChange(todo.isFinished),
+      create: (context) =>
+          ChecklistCubit()..checklistChange(widget.todo.isFinished),
       child: Dismissible(
-        key: ObjectKey(todo),
+        key: ObjectKey(widget.todo),
         direction: DismissDirection.endToStart,
         confirmDismiss: (_) {
           return showDialog(
@@ -48,7 +72,7 @@ class TodoContainer extends StatelessWidget {
                     fontFamily: 'Patrick Hand',
                     fontSize: 20,
                     fontWeight: FontWeight.w600,
-                    color: isDark ? Colors.white : Colors.black54,
+                    color: widget.isDark ? Colors.white : Colors.black54,
                   ),
                 ),
                 actions: [
@@ -63,7 +87,9 @@ class TodoContainer extends StatelessWidget {
                       ),
                     ),
                     onPressed: () {
-                      context.read<TodoBloc>().add(TodoDelete(todo: todo));
+                      context
+                          .read<TodoBloc>()
+                          .add(TodoDelete(todo: widget.todo));
                       context.read<TodoBloc>().add(const TodoGet());
                       Navigator.pop(context);
                     },
@@ -91,12 +117,12 @@ class TodoContainer extends StatelessWidget {
           width: double.infinity,
           margin: EdgeInsets.fromLTRB(
             20,
-            index == 0 ? 20 : 10,
+            widget.index == 0 ? 20 : 10,
             20,
-            index == length - 1 ? 20 : 10,
+            widget.index == widget.length - 1 ? 20 : 10,
           ),
           decoration: BoxDecoration(
-            color: isDark ? const Color(0xFFDEE8F5) : Colors.white,
+            color: widget.isDark ? const Color(0xFFDEE8F5) : Colors.white,
             borderRadius: BorderRadius.circular(15),
             boxShadow: const [
               BoxShadow(
@@ -115,27 +141,28 @@ class TodoContainer extends StatelessWidget {
                 width: double.infinity,
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
-                    colors: todo.dateTitle == 'Hari Ini'
+                    colors: widget.todo.dateTitle == 'Hari Ini'
                         ? [
                             const Color(0xFF309CFF),
                             const Color(0xFF044D90),
                           ]
-                        : todo.dateTitle == 'Besok'
+                        : widget.todo.dateTitle == 'Besok'
                             ? [
                                 const Color(0xFFE2E719),
                                 const Color(0xFF044D90),
                               ]
-                            : todo.dateTitle == 'Minggu Ini'
+                            : widget.todo.dateTitle == 'Minggu Ini'
                                 ? [
                                     const Color(0xFF15F22B),
                                     const Color(0xFF044D90),
                                   ]
-                                : todo.dateTitle == 'Minggu Depan'
+                                : widget.todo.dateTitle == 'Minggu Depan'
                                     ? [
                                         const Color(0xFF156009),
                                         const Color(0xFF044D90),
                                       ]
-                                    : todo.dateTitle == '2 Minggu / Lebih'
+                                    : widget.todo.dateTitle ==
+                                            '2 Minggu / Lebih'
                                         ? [
                                             const Color(0xFF273DFF),
                                             const Color(0xFF044D90),
@@ -153,7 +180,7 @@ class TodoContainer extends StatelessWidget {
                   ),
                 ),
                 child: Text(
-                  todo.dateTitle,
+                  widget.todo.dateTitle,
                   style: const TextStyle(
                     fontFamily: 'Patrick Hand',
                     fontSize: 18,
@@ -168,7 +195,7 @@ class TodoContainer extends StatelessWidget {
                     context,
                     MaterialPageRoute(
                       builder: (context) {
-                        return FormPage(isAdd: false, todo: todo);
+                        return FormPage(isAdd: false, todo: widget.todo);
                       },
                     ),
                   );
@@ -178,15 +205,26 @@ class TodoContainer extends StatelessWidget {
                     shape: const StadiumBorder(),
                     activeColor: Colors.amber,
                     value: context.watch<ChecklistCubit>().state.isChecked,
-                    onChanged: (value) {
-                      context.read<ChecklistCubit>().checklistChange(value!);
+                    onChanged: (newValue) {
+                      context.read<ChecklistCubit>().checklistChange(newValue!);
+                      if (newValue) {
+                        reminderCubit.cancelReminder(widget.todo.id!);
+                      }
+                      if (newValue == false) {
+                        reminderCubit.setReminder(TodoReminder(
+                          widget.todo.id!,
+                          widget.todo.title,
+                          '',
+                          widget.todo.date,
+                        ));
+                      }
                       addNewChecklistedTodo(
-                          context: context, value: value, todo: todo);
+                          context: context, value: newValue, todo: widget.todo);
                     },
                   );
                 }),
                 title: Text(
-                  todo.title,
+                  widget.todo.title,
                   style: const TextStyle(
                     fontFamily: 'Patrick Hand',
                     fontSize: 18,
@@ -201,7 +239,7 @@ class TodoContainer extends StatelessWidget {
                       height: 3,
                     ),
                     Text(
-                      todo.description,
+                      widget.todo.description,
                       style: const TextStyle(
                         fontFamily: 'Patrick Hand',
                         fontSize: 14,
@@ -213,7 +251,7 @@ class TodoContainer extends StatelessWidget {
                       height: 3,
                     ),
                     Text(
-                      DateFormat('dd-MMM-yyyy').format(todo.date),
+                      DateFormat('dd-MMM-yyyy').format(widget.todo.date),
                       style: const TextStyle(
                         fontSize: 14,
                         fontWeight: FontWeight.w400,
@@ -224,9 +262,9 @@ class TodoContainer extends StatelessWidget {
                       height: 3,
                     ),
                     Text(
-                      todo.hour.toString().padLeft(2, '0') +
+                      widget.todo.hour.toString().padLeft(2, '0') +
                           ' : ' +
-                          todo.minute.toString().padLeft(2, '0'),
+                          widget.todo.minute.toString().padLeft(2, '0'),
                       style: const TextStyle(
                         fontFamily: 'Patrick Hand',
                         fontSize: 14,
@@ -238,7 +276,7 @@ class TodoContainer extends StatelessWidget {
                       height: 3,
                     ),
                     Text(
-                      todo.category,
+                      widget.todo.category,
                       style: const TextStyle(
                         fontFamily: 'Patrick Hand',
                         fontSize: 14,
