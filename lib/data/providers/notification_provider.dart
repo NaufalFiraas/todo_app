@@ -10,7 +10,6 @@ class NotificationProvider {
   }
 
   Future<void> init() async {
-    print('init');
     AndroidInitializationSettings androidSettings =
         AndroidInitializationSettings('@mipmap/ic_launcher');
     IOSInitializationSettings iOSSettings = IOSInitializationSettings();

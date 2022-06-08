@@ -7,7 +7,6 @@ import 'package:todo_app/blocs/darktheme_cubit/darktheme_cubit.dart';
 import 'package:todo_app/blocs/reminder_cubit/reminder_cubit.dart';
 import 'package:todo_app/blocs/todo_bloc/todo_bloc.dart';
 import 'package:todo_app/data/providers/dbhelper.dart';
-import 'package:todo_app/data/providers/notification_provider.dart';
 import 'package:todo_app/data/repositories/todo_repository.dart';
 import 'package:todo_app/view/homepage/home_page.dart';
 import 'package:timezone/data/latest.dart' as tz;
