@@ -35,13 +35,13 @@ class NotificationProvider {
   }
 
   Future<void> showScheduledNotif(
-      int id, String title, String body, DateTime time) async {
+      int id, String title, String body, DateTime time, int delay) async {
     print('Execute showSchedule');
     notification.zonedSchedule(
       id,
       title,
       body,
-      _makeSchedule(time),
+      _makeSchedule(time, delay),
       notificationDetails(),
       uiLocalNotificationDateInterpretation:
           UILocalNotificationDateInterpretation.absoluteTime,
@@ -49,7 +49,7 @@ class NotificationProvider {
     );
   }
 
-  tz.TZDateTime _makeSchedule(DateTime time) {
+  tz.TZDateTime _makeSchedule(DateTime time, int delay) {
     final tz.Location location = tz.getLocation('Asia/Jakarta');
     final tz.TZDateTime schedule = tz.TZDateTime(
       location,
@@ -60,7 +60,7 @@ class NotificationProvider {
       time.minute,
     );
 
-    return schedule;
+    return schedule.subtract(Duration(minutes: delay));
   }
 
   Future<void> cancelReminder(int id) async {

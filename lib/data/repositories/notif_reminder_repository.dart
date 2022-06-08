@@ -18,6 +18,7 @@ class NotifReminderRepository {
       todoReminder.title,
       todoReminder.body,
       todoReminder.time,
+      todoReminder.delay,
     );
   }
 
