@@ -19,6 +19,7 @@ class ReminderCubit extends Cubit<ReminderState> {
 
   void setReminder(TodoReminder todoReminder) {
     repo.setReminder(todoReminder);
+    emit(ReminderChange(todoReminder.delay));
   }
 
   void cancelReminder(int id) {
