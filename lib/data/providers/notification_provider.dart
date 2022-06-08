@@ -10,6 +10,7 @@ class NotificationProvider {
   }
 
   Future<void> init() async {
+    print('init');
     AndroidInitializationSettings androidSettings =
         AndroidInitializationSettings('@mipmap/ic_launcher');
     IOSInitializationSettings iOSSettings = IOSInitializationSettings();
@@ -27,6 +28,7 @@ class NotificationProvider {
       android: AndroidNotificationDetails(
         'channel id',
         'channel name',
+        channelDescription: 'channel description',
         importance: Importance.max,
       ),
       iOS: IOSNotificationDetails(),
@@ -35,16 +37,31 @@ class NotificationProvider {
 
   Future<void> showScheduledNotif(
       int id, String title, String body, DateTime time) async {
+    print('Execute showSchedule');
     notification.zonedSchedule(
       id,
       title,
       body,
-      tz.TZDateTime.from(time, tz.getLocation('Asia/Jakarta')),
+      _makeSchedule(time),
       notificationDetails(),
       uiLocalNotificationDateInterpretation:
           UILocalNotificationDateInterpretation.absoluteTime,
       androidAllowWhileIdle: true,
     );
+  }
+
+  tz.TZDateTime _makeSchedule(DateTime time) {
+    final tz.Location location = tz.getLocation('Asia/Jakarta');
+    final tz.TZDateTime schedule = tz.TZDateTime(
+      location,
+      time.year,
+      time.month,
+      time.day,
+      time.hour,
+      time.minute,
+    );
+
+    return schedule;
   }
 
   Future<void> cancelReminder(int id) async {

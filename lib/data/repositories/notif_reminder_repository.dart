@@ -8,6 +8,10 @@ class NotifReminderRepository {
     provider = optionalProvider ?? NotificationProvider();
   }
 
+  Future<void> initNotif() async {
+    await provider.init();
+  }
+
   void setReminder(TodoReminder todoReminder) {
     provider.showScheduledNotif(
       todoReminder.id,
@@ -17,7 +21,7 @@ class NotifReminderRepository {
     );
   }
 
-  void cancelReminder(TodoReminder todoReminder) {
-    provider.cancelReminder(todoReminder.id);
+  void cancelReminder(int id) {
+    provider.cancelReminder(id);
   }
 }

@@ -13,11 +13,15 @@ class ReminderCubit extends Cubit<ReminderState> {
     repo = optionalRepo ?? NotifReminderRepository();
   }
 
+  void initNotif() async {
+    await repo.initNotif();
+  }
+
   void setReminder(TodoReminder todoReminder) {
     repo.setReminder(todoReminder);
   }
 
-  void cancelReminder(TodoReminder todoReminder) {
-    repo.cancelReminder(todoReminder);
+  void cancelReminder(int id) {
+    repo.cancelReminder(id);
   }
 }

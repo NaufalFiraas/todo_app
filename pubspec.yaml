@@ -74,7 +74,6 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
     - assets/images/todoapp.png
-    - assets/lotties/empty.json
     - assets/images/todo_splash.png
     - assets/images/nodata.png
   #   - images/a_dot_burr.jpeg
