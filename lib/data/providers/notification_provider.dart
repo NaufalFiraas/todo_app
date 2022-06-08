@@ -46,4 +46,8 @@ class NotificationProvider {
       androidAllowWhileIdle: true,
     );
   }
+
+  Future<void> cancelReminder(int id) async {
+    notification.cancel(id);
+  }
 }
