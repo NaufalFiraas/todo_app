@@ -77,6 +77,7 @@ class TodoRepository {
             minute: rawData[index]['minute'],
             category: rawData[index]['category'],
             isFinished: rawData[index]['isFinished'] == 0 ? false : true,
+            delay: rawData[index]['delay'],
           );
         },
       );

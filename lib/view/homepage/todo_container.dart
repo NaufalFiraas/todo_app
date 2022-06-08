@@ -309,6 +309,7 @@ class _TodoContainerState extends State<TodoContainer> {
       minute: todo.minute,
       category: todo.category,
       isFinished: value,
+      delay: 0,
     );
     context.read<TodoBloc>().add(TodoUpdate(todo: newTodo, addChecklist: true));
   }

@@ -26,6 +26,7 @@ void main() {
       minute: 25,
       category: 'category test',
       isFinished: false,
+      delay: 0,
     );
   });
 
@@ -94,6 +95,7 @@ void main() {
               'minute': 25,
               'category': 'category test',
               'isFinished': 0,
+              'delay': 0,
             },
           ]));
       List<Todo>? getTodo = await todoRepository.getTodo(null);
@@ -110,6 +112,7 @@ void main() {
             minute: 25,
             category: 'category test',
             isFinished: false,
+            delay: 0,
           ),
         ]),
       );
@@ -127,6 +130,7 @@ void main() {
               'minute': 25,
               'category': 'category test',
               'isFinished': 0,
+              'delay': 0,
             },
             {
               'id': 1,
@@ -138,6 +142,7 @@ void main() {
               'minute': 26,
               'category': 'category1 test',
               'isFinished': 1,
+              'delay': 1,
             },
             {
               'id': 1,
@@ -149,6 +154,7 @@ void main() {
               'minute': 26,
               'category': 'category1 test',
               'isFinished': 1,
+              'delay': 2,
             },
           ]));
       List<Todo>? getTodo = await todoRepository.getTodo(null);
@@ -165,10 +171,11 @@ void main() {
               minute: 25,
               category: 'category test',
               isFinished: false,
+              delay: 0,
             ),
             Todo(
               id: 1,
-              dateTitle: 'Minggu Depan',
+              dateTitle: 'Minggu Ini',
               title: 'title1 test',
               description: 'description1 test',
               date: date.add(const Duration(days: 4)),
@@ -176,6 +183,7 @@ void main() {
               minute: 26,
               category: 'category1 test',
               isFinished: true,
+              delay: 1,
             ),Todo(
               id: 1,
               dateTitle: '2 Minggu / Lebih',
@@ -186,6 +194,7 @@ void main() {
               minute: 26,
               category: 'category1 test',
               isFinished: true,
+              delay: 2
             ),
 
           ]));
