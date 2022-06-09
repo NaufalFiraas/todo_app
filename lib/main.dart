@@ -4,6 +4,7 @@ import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:todo_app/blocs/darktheme_cubit/darktheme_cubit.dart';
+import 'package:todo_app/blocs/reminder_cubit/reminder_cubit.dart';
 import 'package:todo_app/blocs/todo_bloc/todo_bloc.dart';
 import 'package:todo_app/data/providers/dbhelper.dart';
 import 'package:todo_app/data/repositories/notif_reminder_repository.dart';
@@ -58,6 +59,9 @@ class _MyAppState extends State<MyApp> {
           create: (context) => TodoBloc(todoRepo)..add(const TodoGet()),
         ),
         BlocProvider<DarkthemeCubit>(create: (context) => DarkthemeCubit()),
+        BlocProvider<ReminderCubit>(
+          create: (context) => ReminderCubit(),
+        ),
       ],
       child: Builder(builder: (context) {
         return MaterialApp(

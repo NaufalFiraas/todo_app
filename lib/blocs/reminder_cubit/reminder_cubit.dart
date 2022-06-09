@@ -23,6 +23,10 @@ class ReminderCubit extends Cubit<ReminderState> {
         : repo.setReminder(todoReminder);
   }
 
+  void instantCancelReminder(int id) {
+    repo.cancelReminder(id);
+  }
+
   void setIconReminderValue(int value) {
     value < 0
         ? emit(ReminderChange(false, value))
