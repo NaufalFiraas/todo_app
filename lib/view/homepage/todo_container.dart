@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:todo_app/blocs/checklist_cubit/checklist_cubit.dart';
+import 'package:todo_app/blocs/reminder_icon_cubit/reminder_icon_cubit.dart';
 import 'package:todo_app/blocs/todo_bloc/todo_bloc.dart';
 import 'package:todo_app/data/models/todo.dart';
 import 'package:todo_app/data/models/todo_reminder.dart';
@@ -31,6 +32,23 @@ class _TodoContainerState extends State<TodoContainer> {
   bool _showDialog = false;
 
   @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    context.read<ReminderCubit>()
+      ..setAndCancelReminder(
+        TodoReminder(
+          widget.todo.id!,
+          widget.todo.title,
+          widget.todo.delay == 0
+              ? 'Saatnya melaksanakan aktivitas ini'
+              : 'Aktivitas dalam ${widget.todo.delay} menit',
+          widget.todo.date,
+          widget.todo.delay,
+        ),
+      );
+  }
+
+  @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
@@ -39,17 +57,8 @@ class _TodoContainerState extends State<TodoContainer> {
               ChecklistCubit()..checklistChange(widget.todo.isFinished),
         ),
         BlocProvider(
-          create: (context) => ReminderCubit()
-            ..setIconReminderValue(widget.todo.delay)
-            ..setAndCancelReminder(TodoReminder(
-              widget.todo.id!,
-              widget.todo.title,
-              widget.todo.delay == 0
-                  ? 'Saatnya melaksanakan aktivitas ini'
-                  : 'Aktivitas dalam ${widget.todo.delay} menit',
-              widget.todo.date,
-              widget.todo.delay,
-            )),
+          create: (context) =>
+              ReminderIconCubit()..changeCondition(widget.todo.delay),
         ),
       ],
       child: Stack(
@@ -299,25 +308,28 @@ class _TodoContainerState extends State<TodoContainer> {
                     trailing: Builder(builder: (context2) {
                       ReminderCubit reminderCubit =
                           context2.watch<ReminderCubit>();
+                      ReminderIconCubit reminderIconCubit =
+                          context2.watch<ReminderIconCubit>();
 
                       return IconButton(
                         icon: Icon(
-                          reminderCubit.state.isDelay
+                          reminderIconCubit.state.isDelay
                               ? widget.todo.dateTitle == 'Kadaluwarsa'
                                   ? Icons.notifications_off
                                   : Icons.notifications_on
                               : Icons.notifications_off,
-                          color: reminderCubit.state.isDelay
+                          color: reminderIconCubit.state.isDelay
                               ? widget.todo.dateTitle == 'Kadaluwarsa'
                                   ? Colors.grey
                                   : Colors.amber
                               : Colors.grey,
                         ),
                         onPressed: () {
-                          if (widget.todo != 'Kadaluwarsa') {
+                          if (widget.todo.dateTitle != 'Kadaluwarsa') {
                             Navigator.push(context,
                                 MaterialPageRoute(builder: (context) {
                               return NotificationSettings(
+                                reminderIconCubit: reminderIconCubit,
                                 reminderCubit: reminderCubit,
                                 todo: widget.todo,
                                 todoBloc: context.read<TodoBloc>(),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:todo_app/blocs/reminder_cubit/reminder_cubit.dart';
+import 'package:todo_app/blocs/reminder_icon_cubit/reminder_icon_cubit.dart';
 import 'package:todo_app/blocs/todo_bloc/todo_bloc.dart';
 import 'package:todo_app/data/models/todo.dart';
 
@@ -7,11 +8,13 @@ import '../../data/models/todo_reminder.dart';
 
 class NotificationSettings extends StatefulWidget {
   final TodoBloc todoBloc;
+  final ReminderIconCubit reminderIconCubit;
   final ReminderCubit reminderCubit;
   final Todo todo;
 
   const NotificationSettings(
       {Key? key,
+      required this.reminderIconCubit,
       required this.reminderCubit,
       required this.todo,
       required this.todoBloc})
@@ -27,7 +30,7 @@ class _NotificationSettingsState extends State<NotificationSettings> {
   @override
   void initState() {
     super.initState();
-    _tempValue = widget.reminderCubit.state.value;
+    _tempValue = widget.reminderIconCubit.state.value;
   }
 
   @override
@@ -75,9 +78,9 @@ class _NotificationSettingsState extends State<NotificationSettings> {
                   value: -1,
                   groupValue: _tempValue,
                   onChanged: (value) {
-                    widget.reminderCubit.setIconReminderValue(value!);
+                    radioOnpressed(value);
                     setState(() {
-                      _tempValue = value;
+                      _tempValue = value!;
                     });
                   },
                 ),
@@ -223,7 +226,7 @@ class _NotificationSettingsState extends State<NotificationSettings> {
   }
 
   void radioOnpressed(int? value) {
-    widget.reminderCubit.setIconReminderValue(value!);
+    widget.reminderIconCubit.changeCondition(value!);
     widget.reminderCubit.setAndCancelReminder(
       TodoReminder(
         widget.todo.id!,
