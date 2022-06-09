@@ -379,7 +379,7 @@ class _FormPageState extends State<FormPage> {
                   minute: context.read<TimeCubit>().state.time.minute,
                   category: context.read<CategoryCubit>().state.categoryValue,
                   isFinished: widget.todo!.isFinished,
-                  delay: -1,
+                  delay: widget.todo!.delay,
                 ),
               ),
             );

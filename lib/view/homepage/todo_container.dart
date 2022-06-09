@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:todo_app/blocs/checklist_cubit/checklist_cubit.dart';
 import 'package:todo_app/blocs/todo_bloc/todo_bloc.dart';
 import 'package:todo_app/data/models/todo.dart';
+import 'package:todo_app/data/models/todo_reminder.dart';
 import 'package:todo_app/view/formpage/form_page.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -36,8 +37,17 @@ class _TodoContainerState extends State<TodoContainer> {
               ChecklistCubit()..checklistChange(widget.todo.isFinished),
         ),
         BlocProvider(
-          create: (context) =>
-              ReminderCubit()..setIconReminderValue(widget.todo.delay),
+          create: (context) => ReminderCubit()
+            ..setIconReminderValue(widget.todo.delay)
+            ..setAndCancelReminder(TodoReminder(
+              widget.todo.id!,
+              widget.todo.title,
+              widget.todo.delay == 0
+                  ? 'Saatnya melaksanakan aktivitas ini'
+                  : 'Aktivitas dalam ${widget.todo.delay} menit',
+              widget.todo.date,
+              widget.todo.delay,
+            )),
         ),
       ],
       child: Dismissible(
