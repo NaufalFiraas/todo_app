@@ -285,10 +285,14 @@ class _TodoContainerState extends State<TodoContainer> {
                   return IconButton(
                     icon: Icon(
                       reminderCubit.state.isDelay
-                          ? Icons.notifications_on
+                          ? widget.todo.dateTitle == 'Kadaluwarsa'
+                              ? Icons.notifications_off
+                              : Icons.notifications_on
                           : Icons.notifications_off,
                       color: reminderCubit.state.isDelay
-                          ? Colors.amber
+                          ? widget.todo.dateTitle == 'Kadaluwarsa'
+                              ? Colors.grey
+                              : Colors.amber
                           : Colors.grey,
                     ),
                     onPressed: () {
