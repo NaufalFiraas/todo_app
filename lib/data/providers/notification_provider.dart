@@ -59,9 +59,7 @@ class NotificationProvider {
       time.minute,
     );
 
-    return delay == null || delay <= 0
-        ? schedule
-        : schedule.subtract(Duration(minutes: delay));
+    return schedule.subtract(Duration(minutes: delay!));
   }
 
   Future<void> cancelReminder(int id) async {

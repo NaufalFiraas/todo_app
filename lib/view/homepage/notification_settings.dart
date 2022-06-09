@@ -96,9 +96,9 @@ class _NotificationSettingsState extends State<NotificationSettings> {
                   value: 0,
                   groupValue: _tempValue,
                   onChanged: (value) {
-                    widget.reminderCubit.setIconReminderValue(value!);
+                    radioOnpressed(value);
                     setState(() {
-                      _tempValue = value;
+                      _tempValue = value!;
                     });
                   },
                 ),
@@ -221,30 +221,33 @@ class _NotificationSettingsState extends State<NotificationSettings> {
       ),
     );
   }
+
   void radioOnpressed(int? value) {
     widget.reminderCubit.setIconReminderValue(value!);
     widget.reminderCubit.setAndCancelReminder(
       TodoReminder(
         widget.todo.id!,
         widget.todo.title,
-        'Aktivitas dalam $value menit lagi',
+        value == 0
+            ? 'Saatnya melaksanakan aktivitas ini'
+            : 'Aktivitas dalam $value menit lagi',
         widget.todo.date,
         value,
       ),
     );
     widget.todoBloc.add(TodoUpdate(
         todo: Todo(
-          id: widget.todo.id,
-          dateTitle: widget.todo.dateTitle,
-          title: widget.todo.title,
-          description: widget.todo.description,
-          date: widget.todo.date,
-          hour: widget.todo.hour,
-          minute: widget.todo.minute,
-          category: widget.todo.category,
-          isFinished: widget.todo.isFinished,
-          delay: value,
-        )));
+      id: widget.todo.id,
+      dateTitle: widget.todo.dateTitle,
+      title: widget.todo.title,
+      description: widget.todo.description,
+      date: widget.todo.date,
+      hour: widget.todo.hour,
+      minute: widget.todo.minute,
+      category: widget.todo.category,
+      isFinished: widget.todo.isFinished,
+      delay: value,
+    )));
     widget.todoBloc.add(TodoGet());
   }
 }
