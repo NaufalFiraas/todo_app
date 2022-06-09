@@ -35,8 +35,7 @@ class NotificationProvider {
   }
 
   Future<void> showScheduledNotif(
-      int id, String title, String body, DateTime time, int delay) async {
-    print('Execute showSchedule');
+      int id, String title, String body, DateTime time, int? delay) async {
     notification.zonedSchedule(
       id,
       title,
@@ -49,7 +48,7 @@ class NotificationProvider {
     );
   }
 
-  tz.TZDateTime _makeSchedule(DateTime time, int delay) {
+  tz.TZDateTime _makeSchedule(DateTime time, int? delay) {
     final tz.Location location = tz.getLocation('Asia/Jakarta');
     final tz.TZDateTime schedule = tz.TZDateTime(
       location,
@@ -60,7 +59,9 @@ class NotificationProvider {
       time.minute,
     );
 
-    return schedule.subtract(Duration(minutes: delay));
+    return delay == null || delay <= 0
+        ? schedule
+        : schedule.subtract(Duration(minutes: delay));
   }
 
   Future<void> cancelReminder(int id) async {

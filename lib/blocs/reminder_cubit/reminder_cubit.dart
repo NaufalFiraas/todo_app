@@ -17,12 +17,15 @@ class ReminderCubit extends Cubit<ReminderState> {
     await repo.initNotif();
   }
 
-  void setReminder(TodoReminder todoReminder) {
-    repo.setReminder(todoReminder);
-    emit(ReminderChange(todoReminder.delay));
+  void setAndCancelReminder(TodoReminder todoReminder) {
+    todoReminder.delay < 0
+        ? repo.cancelReminder(todoReminder.id)
+        : repo.setReminder(todoReminder);
   }
 
-  void cancelReminder(int id) {
-    repo.cancelReminder(id);
+  void setIconReminderValue(int value) {
+    value < 0
+        ? emit(ReminderChange(false, value))
+        : emit(ReminderChange(true, value));
   }
 }

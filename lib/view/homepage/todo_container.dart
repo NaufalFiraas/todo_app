@@ -5,8 +5,8 @@ import 'package:todo_app/data/models/todo.dart';
 import 'package:todo_app/view/formpage/form_page.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:todo_app/view/homepage/notification_settings.dart';
 import '../../blocs/reminder_cubit/reminder_cubit.dart';
-import '../../data/models/todo_reminder.dart';
 
 class TodoContainer extends StatefulWidget {
   final int index;
@@ -27,28 +27,19 @@ class TodoContainer extends StatefulWidget {
 }
 
 class _TodoContainerState extends State<TodoContainer> {
-  late final ReminderCubit reminderCubit;
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    reminderCubit = context.read<ReminderCubit>();
-    if (!widget.todo.isFinished && widget.todo.date.isAfter(DateTime.now())) {
-      reminderCubit.setReminder(TodoReminder(
-        widget.todo.id!,
-        widget.todo.title,
-        '',
-        widget.todo.date,
-        0,
-      ));
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) =>
-          ChecklistCubit()..checklistChange(widget.todo.isFinished),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (context) =>
+              ChecklistCubit()..checklistChange(widget.todo.isFinished),
+        ),
+        BlocProvider(
+          create: (context) =>
+              ReminderCubit()..setIconReminderValue(widget.todo.delay),
+        ),
+      ],
       child: Dismissible(
         key: ObjectKey(widget.todo),
         direction: DismissDirection.endToStart,
@@ -192,14 +183,16 @@ class _TodoContainerState extends State<TodoContainer> {
               ),
               ListTile(
                 onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) {
-                        return FormPage(isAdd: false, todo: widget.todo);
-                      },
-                    ),
-                  );
+                  if (widget.todo.dateTitle != 'Kadaluwarsa') {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) {
+                          return FormPage(isAdd: false, todo: widget.todo);
+                        },
+                      ),
+                    );
+                  }
                 },
                 leading: Builder(builder: (context) {
                   return Checkbox(
@@ -208,18 +201,6 @@ class _TodoContainerState extends State<TodoContainer> {
                     value: context.watch<ChecklistCubit>().state.isChecked,
                     onChanged: (newValue) {
                       context.read<ChecklistCubit>().checklistChange(newValue!);
-                      if (newValue) {
-                        reminderCubit.cancelReminder(widget.todo.id!);
-                      }
-                      if (newValue == false) {
-                        reminderCubit.setReminder(TodoReminder(
-                          widget.todo.id!,
-                          widget.todo.title,
-                          '',
-                          widget.todo.date,
-                          0
-                        ));
-                      }
                       addNewChecklistedTodo(
                           context: context, value: newValue, todo: widget.todo);
                     },
@@ -288,6 +269,32 @@ class _TodoContainerState extends State<TodoContainer> {
                     ),
                   ],
                 ),
+                trailing: Builder(builder: (context2) {
+                  ReminderCubit reminderCubit = context2.watch<ReminderCubit>();
+
+                  return IconButton(
+                    icon: Icon(
+                      reminderCubit.state.isDelay
+                          ? Icons.notifications_on
+                          : Icons.notifications_off,
+                      color: reminderCubit.state.isDelay
+                          ? Colors.amber
+                          : Colors.grey,
+                    ),
+                    onPressed: () {
+                      if (widget.todo != 'Kadaluwarsa') {
+                        Navigator.push(context,
+                            MaterialPageRoute(builder: (context) {
+                          return NotificationSettings(
+                            reminderCubit: reminderCubit,
+                            todo: widget.todo,
+                            todoBloc: context.read<TodoBloc>(),
+                          );
+                        }));
+                      }
+                    },
+                  );
+                }),
               ),
             ],
           ),
