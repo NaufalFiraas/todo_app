@@ -209,7 +209,7 @@ class HomePage extends StatelessWidget {
                           children: [
                             Image.asset(
                               'assets/images/nodata.png',
-                              width: MediaQuery.of(context).size.height * 0.32,
+                              height: MediaQuery.of(context).size.height * 0.4,
                             ),
                             Text(
                               'Tidak Ada Data!',
