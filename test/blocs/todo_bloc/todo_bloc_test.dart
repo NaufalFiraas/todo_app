@@ -27,6 +27,7 @@ void main() {
       minute: 25,
       category: 'category test',
       isFinished: false,
+      delay: 0,
     );
   });
 

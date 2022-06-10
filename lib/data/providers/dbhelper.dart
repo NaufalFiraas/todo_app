@@ -23,7 +23,8 @@ class DbHelper {
             hour INTEGER,
             minute INTEGER,
             category TEXT,
-            isFinished BOOLEAN
+            isFinished BOOLEAN,
+            delay INTEGER
           )
         ''');
       },

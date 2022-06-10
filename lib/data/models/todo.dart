@@ -11,6 +11,7 @@ class Todo extends Equatable {
   final int minute;
   final String category;
   final bool isFinished;
+  final int delay;
 
   const Todo({
     this.id,
@@ -22,6 +23,7 @@ class Todo extends Equatable {
     required this.minute,
     required this.category,
     required this.isFinished,
+    required this.delay,
   });
 
   Map<String, dynamic> toMap() {
@@ -35,12 +37,13 @@ class Todo extends Equatable {
       'minute': minute,
       'category': category,
       'isFinished': isFinished ? 1 : 0,
+      'delay': delay,
     };
   }
 
   @override
   String toString() {
-    return 'Todo(id: $id, dateTitle: $dateTitle, title: $title, description: $description, date: $date, hour: $hour, minute: $minute, category: $category, isFinished: $isFinished)';
+    return 'Todo(id: $id, dateTitle: $dateTitle, title: $title, description: $description, date: $date, hour: $hour, minute: $minute, category: $category, isFinished: $isFinished, delay: $delay)';
   }
 
   @override
@@ -54,5 +57,6 @@ class Todo extends Equatable {
         minute,
         category,
         isFinished,
+        delay,
       ];
 }
