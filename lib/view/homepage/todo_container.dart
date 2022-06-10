@@ -63,10 +63,6 @@ class _TodoContainerState extends State<TodoContainer> {
         key: ObjectKey(widget.todo),
         direction: DismissDirection.endToStart,
         confirmDismiss: (_) {
-          // setState(() {
-          //   _showDialog = true;
-          // });
-          // return fakeShowDialog();
           return showDialog(
             context: context,
             builder: (context) {
