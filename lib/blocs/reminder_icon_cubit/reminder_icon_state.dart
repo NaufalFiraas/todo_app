@@ -8,7 +8,7 @@ abstract class ReminderIconState extends Equatable {
 }
 
 class ReminderIconInitial extends ReminderIconState {
-  ReminderIconInitial() : super(false, 0);
+  ReminderIconInitial() : super(false, -1);
 
   @override
   List<Object> get props => [isDelay, value];

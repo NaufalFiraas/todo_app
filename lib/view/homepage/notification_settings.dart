@@ -3,22 +3,14 @@ import 'package:todo_app/blocs/reminder_cubit/reminder_cubit.dart';
 import 'package:todo_app/blocs/reminder_icon_cubit/reminder_icon_cubit.dart';
 import 'package:todo_app/blocs/todo_bloc/todo_bloc.dart';
 import 'package:todo_app/data/models/todo.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../data/models/todo_reminder.dart';
 
 class NotificationSettings extends StatefulWidget {
-  final TodoBloc todoBloc;
-  final ReminderIconCubit reminderIconCubit;
-  final ReminderCubit reminderCubit;
   final Todo todo;
 
-  const NotificationSettings(
-      {Key? key,
-      required this.reminderIconCubit,
-      required this.reminderCubit,
-      required this.todo,
-      required this.todoBloc})
-      : super(key: key);
+  const NotificationSettings({Key? key, required this.todo}) : super(key: key);
 
   @override
   State<NotificationSettings> createState() => _NotificationSettingsState();
@@ -28,9 +20,9 @@ class _NotificationSettingsState extends State<NotificationSettings> {
   late int _tempValue;
 
   @override
-  void initState() {
-    super.initState();
-    _tempValue = widget.reminderIconCubit.state.value;
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _tempValue = context.watch<ReminderIconCubit>().state.value;
   }
 
   @override
@@ -78,7 +70,6 @@ class _NotificationSettingsState extends State<NotificationSettings> {
                   value: -1,
                   groupValue: _tempValue,
                   onChanged: (value) {
-                    radioOnpressed(value);
                     setState(() {
                       _tempValue = value!;
                     });
@@ -99,7 +90,6 @@ class _NotificationSettingsState extends State<NotificationSettings> {
                   value: 0,
                   groupValue: _tempValue,
                   onChanged: (value) {
-                    radioOnpressed(value);
                     setState(() {
                       _tempValue = value!;
                     });
@@ -120,7 +110,6 @@ class _NotificationSettingsState extends State<NotificationSettings> {
                   value: 5,
                   groupValue: _tempValue,
                   onChanged: (value) {
-                    radioOnpressed(value);
                     setState(() {
                       _tempValue = value!;
                     });
@@ -141,7 +130,6 @@ class _NotificationSettingsState extends State<NotificationSettings> {
                   value: 10,
                   groupValue: _tempValue,
                   onChanged: (value) {
-                    radioOnpressed(value);
                     setState(() {
                       _tempValue = value!;
                     });
@@ -162,7 +150,6 @@ class _NotificationSettingsState extends State<NotificationSettings> {
                   value: 15,
                   groupValue: _tempValue,
                   onChanged: (value) {
-                    radioOnpressed(value);
                     setState(() {
                       _tempValue = value!;
                     });
@@ -183,7 +170,6 @@ class _NotificationSettingsState extends State<NotificationSettings> {
                   value: 30,
                   groupValue: _tempValue,
                   onChanged: (value) {
-                    radioOnpressed(value);
                     setState(() {
                       _tempValue = value!;
                     });
@@ -204,7 +190,6 @@ class _NotificationSettingsState extends State<NotificationSettings> {
                   value: 60,
                   groupValue: _tempValue,
                   onChanged: (value) {
-                    radioOnpressed(value);
                     setState(() {
                       _tempValue = value!;
                     });
@@ -219,38 +204,115 @@ class _NotificationSettingsState extends State<NotificationSettings> {
                 )
               ],
             ),
+            SizedBox(
+              height: 20,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Container(
+                  width: 120,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(15),
+                    gradient: const LinearGradient(
+                      colors: [
+                        Color(0xFF309CFF),
+                        Color(0xFF044D90),
+                      ],
+                      begin: Alignment.centerLeft,
+                      end: Alignment.centerRight,
+                    ),
+                  ),
+                  child: ElevatedButton(
+                    child: Text(
+                      'Simpan',
+                      style: TextStyle(
+                        fontFamily: 'Patrick Hand',
+                        fontSize: 22,
+                        color: Colors.white,
+                      ),
+                    ),
+                    onPressed: () {
+                      radioOnpressed(context, _tempValue);
+                      Navigator.pop(context);
+                    },
+                    style: ElevatedButton.styleFrom(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(15),
+                      ),
+                      primary: Colors.transparent,
+                      shadowColor: Colors.transparent,
+                    ),
+                  ),
+                ),
+                Container(
+                  width: 120,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(15),
+                    gradient: const LinearGradient(
+                      colors: [
+                        Color(0xFF309CFF),
+                        Color(0xFF044D90),
+                      ],
+                      begin: Alignment.centerLeft,
+                      end: Alignment.centerRight,
+                    ),
+                  ),
+                  child: ElevatedButton(
+                    child: Text(
+                      'Kembali',
+                      style: TextStyle(
+                        fontFamily: 'Patrick Hand',
+                        fontSize: 22,
+                        color: Colors.white,
+                      ),
+                    ),
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    style: ElevatedButton.styleFrom(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(15),
+                      ),
+                      primary: Colors.transparent,
+                      shadowColor: Colors.transparent,
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ],
         ),
       ),
     );
   }
 
-  void radioOnpressed(int? value) {
-    widget.reminderIconCubit.changeCondition(value!);
-    widget.reminderCubit.setAndCancelReminder(
-      TodoReminder(
-        widget.todo.id!,
-        widget.todo.title,
-        value == 0
-            ? 'Saatnya melaksanakan aktivitas ini'
-            : 'Aktivitas dalam $value menit lagi',
-        widget.todo.date,
-        value,
-      ),
-    );
-    widget.todoBloc.add(TodoUpdate(
-        todo: Todo(
-      id: widget.todo.id,
-      dateTitle: widget.todo.dateTitle,
-      title: widget.todo.title,
-      description: widget.todo.description,
-      date: widget.todo.date,
-      hour: widget.todo.hour,
-      minute: widget.todo.minute,
-      category: widget.todo.category,
-      isFinished: widget.todo.isFinished,
-      delay: value,
-    )));
-    widget.todoBloc.add(TodoGet());
+  void radioOnpressed(BuildContext context, int? value) {
+    context.read<ReminderIconCubit>().changeCondition(value!);
+    context.read<ReminderCubit>().setAndCancelReminder(
+          TodoReminder(
+            widget.todo.id!,
+            widget.todo.title,
+            value == 0
+                ? 'Saatnya melaksanakan aktivitas ini'
+                : 'Aktivitas dalam $value menit lagi',
+            widget.todo.date,
+            value,
+          ),
+        );
+    context.read<TodoBloc>().add(TodoUpdate(
+            todo: Todo(
+          id: widget.todo.id,
+          dateTitle: widget.todo.dateTitle,
+          title: widget.todo.title,
+          description: widget.todo.description,
+          date: widget.todo.date,
+          hour: widget.todo.hour,
+          minute: widget.todo.minute,
+          category: widget.todo.category,
+          isFinished: widget.todo.isFinished,
+          delay: value,
+        )));
+    context.read<TodoBloc>().add(TodoGet());
   }
 }

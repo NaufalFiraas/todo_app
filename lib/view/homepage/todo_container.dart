@@ -29,8 +29,6 @@ class TodoContainer extends StatefulWidget {
 }
 
 class _TodoContainerState extends State<TodoContainer> {
-  bool _showDialog = false;
-
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
@@ -61,332 +59,280 @@ class _TodoContainerState extends State<TodoContainer> {
               ReminderIconCubit()..changeCondition(widget.todo.delay),
         ),
       ],
-      child: Stack(
-        children: [
-          Dismissible(
-            key: ObjectKey(widget.todo),
-            direction: DismissDirection.endToStart,
-            confirmDismiss: (_) {
-              // setState(() {
-              //   _showDialog = true;
-              // });
-              // return fakeShowDialog();
-              return showDialog(
-                context: context,
-                builder: (context) {
-                  return Builder(builder: (context) {
-                    return AlertDialog(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(15),
-                      ),
-                      title: const Text(
-                        'Hapus',
+      child: Dismissible(
+        key: ObjectKey(widget.todo),
+        direction: DismissDirection.endToStart,
+        confirmDismiss: (_) {
+          // setState(() {
+          //   _showDialog = true;
+          // });
+          // return fakeShowDialog();
+          return showDialog(
+            context: context,
+            builder: (context) {
+              return Builder(builder: (context) {
+                return AlertDialog(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(15),
+                  ),
+                  title: const Text(
+                    'Hapus',
+                    style: TextStyle(
+                      fontFamily: 'Patrick Hand',
+                      color: Color(0xFF309CFF),
+                    ),
+                  ),
+                  content: Text(
+                    'Yakin Hapus?',
+                    style: TextStyle(
+                      fontFamily: 'Patrick Hand',
+                      fontSize: 20,
+                      fontWeight: FontWeight.w600,
+                      color: widget.isDark ? Colors.white : Colors.black54,
+                    ),
+                  ),
+                  actions: [
+                    TextButton(
+                      child: const Text(
+                        'Ya',
                         style: TextStyle(
                           fontFamily: 'Patrick Hand',
+                          fontSize: 18,
+                          fontWeight: FontWeight.w500,
                           color: Color(0xFF309CFF),
                         ),
                       ),
-                      content: Text(
-                        'Yakin Hapus?',
+                      onPressed: () {
+                        context
+                            .read<TodoBloc>()
+                            .add(TodoDelete(todo: widget.todo));
+                        context.read<TodoBloc>().add(const TodoGet());
+                        context
+                            .read<ReminderCubit>()
+                            .instantCancelReminder(widget.todo.id!);
+                        Navigator.pop(context);
+                      },
+                    ),
+                    TextButton(
+                      child: const Text(
+                        'Batal',
                         style: TextStyle(
                           fontFamily: 'Patrick Hand',
-                          fontSize: 20,
-                          fontWeight: FontWeight.w600,
-                          color: widget.isDark ? Colors.white : Colors.black54,
+                          fontSize: 18,
+                          fontWeight: FontWeight.w500,
+                          color: Color(0xFF309CFF),
                         ),
                       ),
-                      actions: [
-                        TextButton(
-                          child: const Text(
-                            'Ya',
-                            style: TextStyle(
-                              fontFamily: 'Patrick Hand',
-                              fontSize: 18,
-                              fontWeight: FontWeight.w500,
-                              color: Color(0xFF309CFF),
-                            ),
-                          ),
-                          onPressed: () {
-                            context
-                                .read<TodoBloc>()
-                                .add(TodoDelete(todo: widget.todo));
-                            context.read<TodoBloc>().add(const TodoGet());
-                            context
-                                .read<ReminderCubit>()
-                                .instantCancelReminder(widget.todo.id!);
-                            Navigator.pop(context);
-                          },
-                        ),
-                        TextButton(
-                          child: const Text(
-                            'Batal',
-                            style: TextStyle(
-                              fontFamily: 'Patrick Hand',
-                              fontSize: 18,
-                              fontWeight: FontWeight.w500,
-                              color: Color(0xFF309CFF),
-                            ),
-                          ),
-                          onPressed: () {
-                            Navigator.pop(context, false);
-                          },
-                        ),
-                      ],
-                    );
-                  });
-                },
-              );
+                      onPressed: () {
+                        Navigator.pop(context, false);
+                      },
+                    ),
+                  ],
+                );
+              });
             },
-            child: Container(
-              width: double.infinity,
-              margin: EdgeInsets.fromLTRB(
-                20,
-                widget.index == 0 ? 20 : 10,
-                20,
-                widget.index == widget.length - 1 ? 20 : 10,
+          );
+        },
+        child: Container(
+          width: double.infinity,
+          margin: EdgeInsets.fromLTRB(
+            20,
+            widget.index == 0 ? 20 : 10,
+            20,
+            widget.index == widget.length - 1 ? 20 : 10,
+          ),
+          decoration: BoxDecoration(
+            color: widget.isDark ? const Color(0xFFDEE8F5) : Colors.white,
+            borderRadius: BorderRadius.circular(15),
+            boxShadow: const [
+              BoxShadow(
+                blurRadius: 10,
+                spreadRadius: 3,
+                color: Colors.black26,
+                offset: Offset(0, 0),
               ),
-              decoration: BoxDecoration(
-                color: widget.isDark ? const Color(0xFFDEE8F5) : Colors.white,
-                borderRadius: BorderRadius.circular(15),
-                boxShadow: const [
-                  BoxShadow(
-                    blurRadius: 10,
-                    spreadRadius: 3,
-                    color: Colors.black26,
-                    offset: Offset(0, 0),
-                  ),
-                ],
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Container(
-                    padding: const EdgeInsets.fromLTRB(15, 2, 15, 2),
-                    width: double.infinity,
-                    decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                        colors: widget.todo.dateTitle == 'Hari Ini'
+            ],
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                padding: const EdgeInsets.fromLTRB(15, 2, 15, 2),
+                width: double.infinity,
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: widget.todo.dateTitle == 'Hari Ini'
+                        ? [
+                            const Color(0xFF309CFF),
+                            const Color(0xFF044D90),
+                          ]
+                        : widget.todo.dateTitle == 'Besok'
                             ? [
-                                const Color(0xFF309CFF),
+                                const Color(0xFFE2E719),
                                 const Color(0xFF044D90),
                               ]
-                            : widget.todo.dateTitle == 'Besok'
+                            : widget.todo.dateTitle == 'Minggu Ini'
                                 ? [
-                                    const Color(0xFFE2E719),
+                                    const Color(0xFF15F22B),
                                     const Color(0xFF044D90),
                                   ]
-                                : widget.todo.dateTitle == 'Minggu Ini'
+                                : widget.todo.dateTitle == 'Minggu Depan'
                                     ? [
-                                        const Color(0xFF15F22B),
+                                        const Color(0xFF156009),
                                         const Color(0xFF044D90),
                                       ]
-                                    : widget.todo.dateTitle == 'Minggu Depan'
+                                    : widget.todo.dateTitle ==
+                                            '2 Minggu / Lebih'
                                         ? [
-                                            const Color(0xFF156009),
+                                            const Color(0xFF273DFF),
                                             const Color(0xFF044D90),
                                           ]
-                                        : widget.todo.dateTitle ==
-                                                '2 Minggu / Lebih'
-                                            ? [
-                                                const Color(0xFF273DFF),
-                                                const Color(0xFF044D90),
-                                              ]
-                                            : [
-                                                const Color(0xFF4B4B4B),
-                                                const Color(0xFF044D90),
-                                              ],
-                        begin: Alignment.centerLeft,
-                        end: Alignment.centerRight,
+                                        : [
+                                            const Color(0xFF4B4B4B),
+                                            const Color(0xFF044D90),
+                                          ],
+                    begin: Alignment.centerLeft,
+                    end: Alignment.centerRight,
+                  ),
+                  borderRadius: const BorderRadius.only(
+                    topLeft: Radius.circular(15),
+                    topRight: Radius.circular(15),
+                  ),
+                ),
+                child: Text(
+                  widget.todo.dateTitle,
+                  style: const TextStyle(
+                    fontFamily: 'Patrick Hand',
+                    fontSize: 18,
+                    fontWeight: FontWeight.w400,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+              ListTile(
+                onTap: () {
+                  if (widget.todo.dateTitle != 'Kadaluwarsa') {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) {
+                          return FormPage(isAdd: false, todo: widget.todo);
+                        },
                       ),
-                      borderRadius: const BorderRadius.only(
-                        topLeft: Radius.circular(15),
-                        topRight: Radius.circular(15),
-                      ),
+                    );
+                  }
+                },
+                leading: Builder(builder: (context) {
+                  return Checkbox(
+                    shape: const StadiumBorder(),
+                    activeColor: Colors.amber,
+                    value: context.watch<ChecklistCubit>().state.isChecked,
+                    onChanged: (newValue) {
+                      context.read<ChecklistCubit>().checklistChange(newValue!);
+                      addNewChecklistedTodo(
+                          context: context, value: newValue, todo: widget.todo);
+                    },
+                  );
+                }),
+                title: Text(
+                  widget.todo.title,
+                  style: const TextStyle(
+                    fontFamily: 'Patrick Hand',
+                    fontSize: 18,
+                    fontWeight: FontWeight.w400,
+                    color: Color(0xFF309CFF),
+                  ),
+                ),
+                subtitle: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const SizedBox(
+                      height: 3,
                     ),
-                    child: Text(
-                      widget.todo.dateTitle,
+                    Text(
+                      widget.todo.description,
                       style: const TextStyle(
                         fontFamily: 'Patrick Hand',
-                        fontSize: 18,
-                        fontWeight: FontWeight.w400,
-                        color: Colors.white,
+                        fontSize: 14,
+                        fontWeight: FontWeight.w500,
+                        color: Color(0xFF787875),
                       ),
                     ),
-                  ),
-                  ListTile(
-                    onTap: () {
+                    const SizedBox(
+                      height: 3,
+                    ),
+                    Text(
+                      DateFormat('dd-MMM-yyyy').format(widget.todo.date),
+                      style: const TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w400,
+                        color: Color(0xFF787875),
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 3,
+                    ),
+                    Text(
+                      widget.todo.hour.toString().padLeft(2, '0') +
+                          ' : ' +
+                          widget.todo.minute.toString().padLeft(2, '0'),
+                      style: const TextStyle(
+                        fontFamily: 'Patrick Hand',
+                        fontSize: 14,
+                        fontWeight: FontWeight.w400,
+                        color: Color(0xFF787875),
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 3,
+                    ),
+                    Text(
+                      widget.todo.category,
+                      style: const TextStyle(
+                        fontFamily: 'Patrick Hand',
+                        fontSize: 14,
+                        fontWeight: FontWeight.w400,
+                        color: Color(0xFF787875),
+                      ),
+                    ),
+                  ],
+                ),
+                trailing: Builder(builder: (context2) {
+                  ReminderIconCubit reminderIconCubit =
+                      context2.watch<ReminderIconCubit>();
+
+                  return IconButton(
+                    icon: Icon(
+                      reminderIconCubit.state.isDelay
+                          ? widget.todo.dateTitle == 'Kadaluwarsa'
+                              ? Icons.notifications_off
+                              : Icons.notifications_on
+                          : Icons.notifications_off,
+                      color: reminderIconCubit.state.isDelay
+                          ? widget.todo.dateTitle == 'Kadaluwarsa'
+                              ? Colors.grey
+                              : Colors.amber
+                          : Colors.grey,
+                    ),
+                    onPressed: () {
                       if (widget.todo.dateTitle != 'Kadaluwarsa') {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) {
-                              return FormPage(isAdd: false, todo: widget.todo);
-                            },
-                          ),
-                        );
+                        Navigator.push(context,
+                            MaterialPageRoute(builder: (context) {
+                          return BlocProvider.value(
+                            value: reminderIconCubit,
+                            child: NotificationSettings(
+                              todo: widget.todo,
+                            ),
+                          );
+                        }));
                       }
                     },
-                    leading: Builder(builder: (context) {
-                      return Checkbox(
-                        shape: const StadiumBorder(),
-                        activeColor: Colors.amber,
-                        value: context.watch<ChecklistCubit>().state.isChecked,
-                        onChanged: (newValue) {
-                          context
-                              .read<ChecklistCubit>()
-                              .checklistChange(newValue!);
-                          addNewChecklistedTodo(
-                              context: context,
-                              value: newValue,
-                              todo: widget.todo);
-                        },
-                      );
-                    }),
-                    title: Text(
-                      widget.todo.title,
-                      style: const TextStyle(
-                        fontFamily: 'Patrick Hand',
-                        fontSize: 18,
-                        fontWeight: FontWeight.w400,
-                        color: Color(0xFF309CFF),
-                      ),
-                    ),
-                    subtitle: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const SizedBox(
-                          height: 3,
-                        ),
-                        Text(
-                          widget.todo.description,
-                          style: const TextStyle(
-                            fontFamily: 'Patrick Hand',
-                            fontSize: 14,
-                            fontWeight: FontWeight.w500,
-                            color: Color(0xFF787875),
-                          ),
-                        ),
-                        const SizedBox(
-                          height: 3,
-                        ),
-                        Text(
-                          DateFormat('dd-MMM-yyyy').format(widget.todo.date),
-                          style: const TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w400,
-                            color: Color(0xFF787875),
-                          ),
-                        ),
-                        const SizedBox(
-                          height: 3,
-                        ),
-                        Text(
-                          widget.todo.hour.toString().padLeft(2, '0') +
-                              ' : ' +
-                              widget.todo.minute.toString().padLeft(2, '0'),
-                          style: const TextStyle(
-                            fontFamily: 'Patrick Hand',
-                            fontSize: 14,
-                            fontWeight: FontWeight.w400,
-                            color: Color(0xFF787875),
-                          ),
-                        ),
-                        const SizedBox(
-                          height: 3,
-                        ),
-                        Text(
-                          widget.todo.category,
-                          style: const TextStyle(
-                            fontFamily: 'Patrick Hand',
-                            fontSize: 14,
-                            fontWeight: FontWeight.w400,
-                            color: Color(0xFF787875),
-                          ),
-                        ),
-                      ],
-                    ),
-                    trailing: Builder(builder: (context2) {
-                      ReminderCubit reminderCubit =
-                          context2.watch<ReminderCubit>();
-                      ReminderIconCubit reminderIconCubit =
-                          context2.watch<ReminderIconCubit>();
-
-                      return IconButton(
-                        icon: Icon(
-                          reminderIconCubit.state.isDelay
-                              ? widget.todo.dateTitle == 'Kadaluwarsa'
-                                  ? Icons.notifications_off
-                                  : Icons.notifications_on
-                              : Icons.notifications_off,
-                          color: reminderIconCubit.state.isDelay
-                              ? widget.todo.dateTitle == 'Kadaluwarsa'
-                                  ? Colors.grey
-                                  : Colors.amber
-                              : Colors.grey,
-                        ),
-                        onPressed: () {
-                          if (widget.todo.dateTitle != 'Kadaluwarsa') {
-                            Navigator.push(context,
-                                MaterialPageRoute(builder: (context) {
-                              return NotificationSettings(
-                                reminderIconCubit: reminderIconCubit,
-                                reminderCubit: reminderCubit,
-                                todo: widget.todo,
-                                todoBloc: context.read<TodoBloc>(),
-                              );
-                            }));
-                          }
-                        },
-                      );
-                    }),
-                  ),
-                ],
+                  );
+                }),
               ),
-            ),
+            ],
           ),
-          _showDialog
-              ? Container(
-                  width: MediaQuery.of(context).size.height,
-                  height: MediaQuery.of(context).size.width,
-                  color: Colors.black87,
-                  child: Container(
-                    width: MediaQuery.of(context).size.width * 0.7,
-                    height: MediaQuery.of(context).size.height * 0.4,
-                    padding: const EdgeInsets.all(15),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(15),
-                    ),
-                    child: Column(
-                      children: [
-                        Text('Hapus'),
-                        Text('Yakin Hapus?'),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            TextButton(
-                              child: Text('Ya'),
-                              onPressed: () {
-                                setState(() {
-                                  _showDialog = false;
-                                });
-                              },
-                            ),
-                            TextButton(
-                              child: Text('Batal'),
-                              onPressed: () {
-                                setState(() {
-                                  _showDialog = false;
-                                });
-                              },
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                )
-              : SizedBox(),
-        ],
+        ),
       ),
     );
   }
@@ -409,9 +355,5 @@ class _TodoContainerState extends State<TodoContainer> {
       delay: 0,
     );
     context.read<TodoBloc>().add(TodoUpdate(todo: newTodo, addChecklist: true));
-  }
-
-  Future<bool?> fakeShowDialog() async {
-    return await null;
   }
 }

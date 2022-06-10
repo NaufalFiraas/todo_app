@@ -11,4 +11,5 @@ class ReminderIconCubit extends Cubit<ReminderIconState> {
         ? emit(ReminderIconChange(false, value))
         : emit(ReminderIconChange(true, value));
   }
+
 }
