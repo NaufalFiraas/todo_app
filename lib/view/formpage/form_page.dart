@@ -39,6 +39,13 @@ class _FormPageState extends State<FormPage> {
     }
   }
 
+  @override
+  void dispose() {
+    activityController.dispose();
+    descriptionController.dispose();
+    super.dispose();
+  }
+
   final List<String> dropdownMenus = [
     'Belanja',
     'Kerja',
